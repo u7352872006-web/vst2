@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ブロック抽出（TXT出力対応）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+body { font-family: Arial; margin: 20px; }
+input, textarea { margin: 8px 0; padding: 6px; }
+textarea { width: 600px; height: 300px; }
+button { padding: 8px 12px; margin-top: 10px; }
+label { display: block; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<h2>ブロック抽出（TXT出力対応）</h2>
+
+<input type="file" id="csvFile" accept=".csv"><br>
+
+<label>流入経路（任意）:</label>
+<input type="text" id="routeInput" placeholder="例: Web広告"><br>
+
+<label>検索日時（例：2025-11-27 22:00:00）:</label>
+<input type="text" id="searchDate" placeholder="YYYY-MM-DD HH:MM:SS"><br><br>
+<p style="color:red;">スプシの更新日時を変更すること！！！</p>
+
+<button onclick="processCSV()">抽出</button>
+
+<h3>抽出結果</h3>
+<textarea id="output" readonly></textarea><br>
+<button onclick="copyText()">コピー</button>
+<button onclick="downloadTXT()">TXT出力</button>
+
+
+<p style="color:red;">日程確定者の対応手順</p>
+<ol>
+  <li>担当予定者に対応不要の連絡</li>
+  <li>Googleカレンダーの予定削除</li>
+  <li>クローザー日程の該当日時を「1」にする</li>
+  <li>個別相談ステータス（広告）のステータスを「先方都合キャンセル」にする</li>
+</ol>
+
+
+<script>
+let filteredRows = [];
+
+function processCSV() {
+    const file = document.getElementById("csvFile").files[0];
+    if (!file) { alert("CSVを選択してください"); return; }
+
+    const route = document.getElementById("routeInput").value.trim();
+    const searchStr = document.getElementById("searchDate").value.trim();
+    const searchDate = new Date(searchStr.replace(/-/g,'/'));
+    if (isNaN(searchDate)) { alert("検索日時の形式が正しくありません"); return; }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const bytes = new Uint8Array(e.target.result);
+        let text;
+        try {
+            text = new TextDecoder("shift_jis").decode(bytes);
+        } catch(err) {
+            alert("Shift_JIS の CSV を読み込めません。UTF-8 CSVも試してください。");
+            return;
+        }
+
+        const allRows = Papa.parse(text, { skipEmptyLines: true }).data;
+        if (allRows.length <= 1) {
+            document.getElementById("output").value = "CSVにデータがありません";
+            filteredRows = [];
+            return;
+        }
+
+        const dataRows = allRows.slice(1); // ヘッダー除く
+        filteredRows = [];
+
+        dataRows.forEach(r => {
+            if (!r[6]) return; // 7列目: ブロック日時
+            const bdStr = r[6].trim();
+            if (!bdStr) return;
+
+            const bdDate = new Date(bdStr.replace(/-/g,'/'));
+            if (isNaN(bdDate)) return;
+            if (bdDate < searchDate) return;
+
+            filteredRows.push({ row: r, bdDate });
+        });
+
+        filteredRows.sort((a,b) => a.bdDate - b.bdDate);
+
+        let outputText = "";
+        filteredRows.forEach(f => {
+            const r = f.row;
+            outputText +=
+`流入経路: ${route || "(未入力)"}
+LINE登録名: ${r[3] || ""}
+ステータス: ${r[4] || ""}
+ブロック日時: ${r[6].trim()}
+
+`;
+        });
+
+        outputText += `---\n抽出件数: ${filteredRows.length}\n全体件数: ${allRows.length - 1}`;
+
+        document.getElementById("output").value = outputText;
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+function copyText() {
+    const t = document.getElementById("output");
+    t.select();
+    document.execCommand("copy");
+    alert("コピーしました！");
+}
+
+function downloadTXT() {
+    const content = document.getElementById("output").value;
+    if (!content.trim()) { alert("出力データがありません"); return; }
+
+    const route = document.getElementById("routeInput").value.trim() || "未入力";
+    const searchStr = document.getElementById("searchDate").value.trim() || "未指定";
+
+    const blob = new Blob([content], { type: "text/plain;charset=Shift_JIS" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ブロック者_${route}_${searchStr}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>

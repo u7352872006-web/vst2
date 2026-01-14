@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>メッセージ生成ツール</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; }
+  .box { margin-bottom: 25px; }
+  textarea { width: 100%; height: 100px; }
+  .row { display: flex; align-items: center; gap: 10px; }
+  button.copy-btn { padding: 6px 10px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h2>メッセージ生成ツール</h2>
+
+<div class="box">
+  <label>LINE名：</label>
+  <input type="text" id="lineName" placeholder="例：佐藤">
+</div>
+
+<button onclick="generate()">生成</button>
+
+<hr>
+
+<!-- １通目 -->
+<div class="box">
+  <h3>タイトル：１通目</h3>
+  <div class="row">
+    <textarea id="out1"></textarea>
+    <button class="copy-btn" onclick="copyText('out1')">コピー</button>
+  </div>
+</div>
+
+<!-- １通目-1 -->
+<div class="box">
+  <h3>タイトル：１通目-1</h3>
+  <div class="row">
+    <textarea id="out2"></textarea>
+    <button class="copy-btn" onclick="copyText('out2')">コピー</button>
+  </div>
+</div>
+
+<!-- １通目-2 -->
+<div class="box">
+  <h3>タイトル：１通目-2</h3>
+  <div class="row">
+    <textarea id="out3"></textarea>
+    <button class="copy-btn" onclick="copyText('out3')">コピー</button>
+  </div>
+</div>
+
+<hr>
+
+<!-- ２通目 -->
+<div class="box">
+  <h3>タイトル：２通目</h3>
+  <div class="row">
+    <textarea id="out4"></textarea>
+    <button class="copy-btn" onclick="copyText('out4')">コピー</button>
+  </div>
+</div>
+
+<!-- ２通目-1 -->
+<div class="box">
+  <h3>タイトル：２通目-1</h3>
+  <div class="row">
+    <textarea id="out5"></textarea>
+    <button class="copy-btn" onclick="copyText('out5')">コピー</button>
+  </div>
+</div>
+
+<!-- ２通目-2 -->
+<div class="box">
+  <h3>タイトル：２通目-2</h3>
+  <div class="row">
+    <textarea id="out6"></textarea>
+    <button class="copy-btn" onclick="copyText('out6')">コピー</button>
+  </div>
+</div>
+
+<hr>
+
+<!-- ３通目 -->
+<div class="box">
+  <h3>タイトル：３通目</h3>
+  <div class="row">
+    <textarea id="out7"></textarea>
+    <button class="copy-btn" onclick="copyText('out7')">コピー</button>
+  </div>
+</div>
+
+<!-- ３通目-1 -->
+<div class="box">
+  <h3>タイトル：３通目-1</h3>
+  <div class="row">
+    <textarea id="out8"></textarea>
+    <button class="copy-btn" onclick="copyText('out8')">コピー</button>
+  </div>
+</div>
+
+<!-- ３通目-2 -->
+<div class="box">
+  <h3>タイトル：３通目-2</h3>
+  <div class="row">
+    <textarea id="out9"></textarea>
+    <button class="copy-btn" onclick="copyText('out9')">コピー</button>
+  </div>
+</div>
+
+<hr>
+
+<!-- ４通目 -->
+<div class="box">
+  <h3>タイトル：４通目</h3>
+  <div class="row">
+    <textarea id="out10"></textarea>
+    <button class="copy-btn" onclick="copyText('out10')">コピー</button>
+  </div>
+</div>
+
+<!-- ４通目-1 -->
+<div class="box">
+  <h3>タイトル：４通目-1</h3>
+  <div class="row">
+    <textarea id="out11"></textarea>
+    <button class="copy-btn" onclick="copyText('out11')">コピー</button>
+  </div>
+</div>
+
+<!-- ４通目-2 -->
+<div class="box">
+  <h3>タイトル：４通目-2</h3>
+  <div class="row">
+    <textarea id="out12"></textarea>
+    <button class="copy-btn" onclick="copyText('out12')">コピー</button>
+  </div>
+</div>
+
+<hr>
+
+<!-- ５通目 -->
+<div class="box">
+  <h3>タイトル：５通目</h3>
+  <div class="row">
+    <textarea id="out13"></textarea>
+    <button class="copy-btn" onclick="copyText('out13')">コピー</button>
+  </div>
+</div>
+
+<script>
+const textIds = [
+  "out1","out2","out3","out4","out5","out6",
+  "out7","out8","out9","out10","out11","out12","out13"
+];
+
+// LINE名変更 → 全ボックスクリア
+document.getElementById("lineName").addEventListener("input", () => {
+  textIds.forEach(id => document.getElementById(id).value = "");
+});
+
+function generate() {
+  const name = document.getElementById("lineName").value.trim();
+  if (!name) {
+    alert("LINE名を入力してください");
+    return;
+  }
+
+  document.getElementById("out1").value =
+    `${name}さんはこれまで副業やったことありますか？`;
+
+  document.getElementById("out2").value =
+    `そうなんですね！どんな副業をしていたんですか？`;
+
+  document.getElementById("out3").value =
+    `なるほど！副業は初めてなんですね！\n昔副業でうまくいかなくて僕らのところにくる人も多いので、${name}さんちょうどよかったですね！`;
+
+  document.getElementById("out4").value =
+    `ちなみになんですけど、今回申し込んだ理由ってなんですか？\n実績が安心できそうだな、とか、スマホでもできそうだな、とか！`;
+
+  document.getElementById("out5").value =
+    `わー、そうなんですね！嬉しいです😆`;
+
+  document.getElementById("out6").value =
+    `当日までに${name}さんのことが知りたいので、下のアンケート回答しておいてもらえたら！\n\n▼アンケートリンク\nhttps://forms.gle/i2XPWLVQE44iYc7b8`;
+
+  document.getElementById("out7").value =
+    `${name}さんは副業でどれくらいの額いきたいですか？`;
+
+  document.getElementById("out8").value =
+    `〜〜！（復唱）いいですね！`;
+
+  document.getElementById("out9").value =
+    `それなら、スマホde動画編集はちょうどよかったです！`;
+
+  document.getElementById("out10").value =
+    `スマホ動画編集についての動画送るんで\nぜひ見ておいてください！\nhttps://youtu.be/96ffpXPY3G8`;
+
+  document.getElementById("out11").value =
+    `素晴らしいです！`;
+
+  document.getElementById("out12").value =
+    `見たら感想欲しいんですけど、どうです？`;
+
+  document.getElementById("out13").value =
+    `よかったらこっちの動画も見てみてください😊\nhttps://youtu.be/U0uhMU_UpL4`;
+}
+
+function copyText(id) {
+  const text = document.getElementById(id);
+  text.select();
+  document.execCommand("copy");
+}
+</script>
+
+</body>
+</html>
