@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>チャット</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; max-width: 800px; }
+  label { display:block; margin-top:12px; font-weight:600; }
+  input, textarea { width:100%; padding:8px; margin-top:6px; box-sizing:border-box; font-size:14px; }
+  button { padding:8px 12px; margin-right:8px; margin-top:12px; }
+  #output { height:160px; }
+</style>
+</head>
+<body>
+  <h1>チャット</h1>
+
+  <label>LINE名（必須）
+    <input id="lineName" type="text">
+  </label>
+
+  <label>内容（必須）
+    <textarea id="content" rows="6"></textarea>
+  </label>
+
+  <div>
+    <button id="generateBtn">生成</button>
+    <button id="clearBtn">クリア</button>
+    <button id="copyBtn">コピー</button>
+  </div>
+
+  <label>生成テキスト（編集可）</label>
+  <textarea id="output" rows="8"></textarea>
+
+<script>
+const lineNameEl = document.getElementById('lineName');
+const contentEl = document.getElementById('content');
+const outputEl = document.getElementById('output');
+const generateBtn = document.getElementById('generateBtn');
+const clearBtn = document.getElementById('clearBtn');
+const copyBtn = document.getElementById('copyBtn');
+
+generateBtn.addEventListener('click', ()=> {
+  const name = lineNameEl.value.trim();
+  const content = contentEl.value;
+
+  if (!name) {
+    alert('LINE名を入力してください。');
+    return;
+  }
+  if (!content) {
+    alert('内容を入力してください。');
+    return;
+  }
+
+  // 「○○」「〇〇」「◯◯」「○ ○」など、丸文字2つをまとめて置換
+  const circlePairRegex = /[\u25CB\u3007\u25EF]\s*[\u25CB\u3007\u25EF]/g;
+
+  let replaced = content.replace(circlePairRegex, name);
+
+  // 念のため、普通の「○○」も置換（保険）
+  replaced = replaced.replace(/○○/g, name);
+
+  outputEl.value = replaced;
+});
+
+// クリア（全項目）
+clearBtn.addEventListener('click', ()=> {
+  lineNameEl.value = '';
+  contentEl.value = '';
+  outputEl.value = '';
+});
+
+// コピー（アラートなし）
+copyBtn.addEventListener('click', async ()=> {
+  const text = outputEl.value;
+  if (!text.trim()) return;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      outputEl.select();
+      document.execCommand('copy');
+    }
+  } else {
+    outputEl.select();
+    document.execCommand('copy');
+  }
+});
+</script>
+
+</body>
+</html>
