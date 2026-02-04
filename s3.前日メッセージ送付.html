@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>前日メッセージの送付</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+<h3>前日メッセージの送付</h3>
+
+<input type="file" id="csvFile" accept=".csv">
+<p id="fileName">CSVを選択してください</p>
+<hr>
+
+<label>
+  面談時間:
+  <select id="meetingTime">
+    <option value="">選択してください</option>
+    <option value="10:00">10:00</option>
+    <option value="11:30">11:30</option>
+    <option value="13:00">13:00</option>
+    <option value="14:30">14:30</option>
+    <option value="16:00">16:00</option>
+    <option value="17:30">17:30</option>
+    <option value="18:30">18:30</option>
+    <option value="19:00">19:00</option>
+    <option value="20:30">20:30</option>
+    <option value="21:00">21:00</option>
+    <option value="21:30">21:30</option>
+    <option value="22:00">22:00</option>
+  </select>
+</label><br><br>
+
+<label>
+  担当者：
+  <select id="staffSelect">
+    <option value="">CSVを読み込んでください</option>
+  </select>
+</label><br><br>
+
+<label>
+  生成テキスト（編集・コピー可）:<br>
+  <textarea id="output" rows="10" cols="60" style="background:#f9f9f9;"></textarea>
+</label>
+<br>
+<button id="copyBtn">コピー</button>
+
+<script>
+const csvFileInput = document.getElementById("csvFile");
+const fileNameDisplay = document.getElementById("fileName");
+
+const meetingTimeInput = document.getElementById("meetingTime");
+const staffSelect = document.getElementById("staffSelect");
+const output = document.getElementById("output");
+const copyBtn = document.getElementById("copyBtn");
+
+let staffData = {};
+
+// 生成処理を関数化
+function generateText() {
+  const staffName = staffSelect.value;
+  const time = meetingTimeInput.value;
+
+  if (!staffName || !time) {
+    output.value = "";
+    return;
+  }
+
+  output.value =
+`お疲れ様です！
+明日の${meetingTimeInput.value}からは予定通りよろしくお願いします😊
+
+時間になったらご参加ください。
+
+${staffData[staffName]}`;
+}
+
+// CSV読み込み
+csvFileInput.addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  fileNameDisplay.textContent = "読み込んだファイル: " + file.name;
+  staffSelect.innerHTML = '<option value="">担当者を選択</option>';
+  staffData = {};
+
+  Papa.parse(file, {
+    header: false,
+    skipEmptyLines: true,
+    complete: results => {
+      results.data.forEach(row => {
+        const name = row[0]?.trim();
+        const url = row[1]?.trim();
+        if (name && url) {
+          staffData[name] = url;
+          staffSelect.insertAdjacentHTML(
+            "beforeend",
+            `<option value="${name}">${name}</option>`
+          );
+        }
+      });
+    }
+  });
+});
+
+// 担当者変更時
+staffSelect.addEventListener("change", generateText);
+
+// 面談時間変更時も再生成
+meetingTimeInput.addEventListener("change", generateText);
+
+// コピー
+copyBtn.addEventListener("click", () => {
+  if (!output.value.trim()) return;
+  output.select();
+  document.execCommand("copy");
+});
+</script>
+
+</body>
+</html>
