@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>0.候補日（10候補）</title>
+<title>面談候補日</title>
 </head>
 <body>
-<h3>候補日（10候補）</h3>
+<h3>面談候補日</h3>
 
-<p>日付と時間帯を入力してください：</p>
+<p>日付と時間を入力してください：</p>
 
 <script>
 // ①～⑩
@@ -20,16 +20,20 @@ const timeOptions = [
   "14:30～15:30",
   "16:00～17:00",
   "17:30～18:30",
+  "18:30～19:30",
   "19:00～20:00",
-  "20:30～21:30"
+  "20:30～21:30",
+  "21:00～22:00",
+  "21:30～22:30",
+  "22:00～23:00"
 ];
 </script>
 
 <form id="scheduleForm">
-<div id="inputs"></div>
-<br><br>
-<button type="button" id="generateBtn">日程を生成</button>
-<button type="button" id="saveBtn">テキストを保存</button>
+  <div id="inputs"></div>
+  <br><br>
+  <button type="button" id="generateBtn">生成</button>
+  <button type="button" id="copyBtn">コピー</button>
 </form>
 
 <textarea id="output" rows="18" cols="50" readonly placeholder="ここに日程候補が表示されます"></textarea>
@@ -65,7 +69,7 @@ for(let i=0;i<10;i++){
     inputsDiv.appendChild(document.createElement("br"));
 }
 
-// 日程生成（選んだ日付を昇順ソートして①〜⑩を付けて表示）
+// 日程生成
 document.getElementById("generateBtn").addEventListener("click", ()=>{
     const week = ["日","月","火","水","木","金","土"];
     let items = [];
@@ -82,48 +86,39 @@ document.getElementById("generateBtn").addEventListener("click", ()=>{
         }
     }
 
-    // 日付昇順ソート
-        // 日付と時間で昇順ソート
+    // 日付 → 時間の順で昇順ソート
     items.sort((a,b)=>{
         const diff = a.dateObj - b.dateObj;
         if(diff !== 0) return diff;
-        // 時間帯 "HH:MM～HH:MM" の開始時刻で比較
+
         const toMinutes = t => {
-            const start = t.split("～")[0];
-            const [h,m] = start.split(":" ).map(Number);
+            const [h,m] = t.split("～")[0].split(":").map(Number);
             return h*60 + m;
         };
         return toMinutes(a.timeVal) - toMinutes(b.timeVal);
-    });((a,b)=> a.dateObj - b.dateObj);
+    });
 
     let outputText = "";
-
     items.forEach((item, idx)=>{
         const d = item.dateObj;
         const month = d.getMonth()+1;
         const day = d.getDate();
         const dayOfWeek = week[d.getDay()];
-        const num = slots[idx]; // ソート後に①〜⑩を振る
-        outputText += `${num} ${month}/${day}(${dayOfWeek}) ${item.timeVal}\n`;
+        outputText += `${slots[idx]} ${month}/${day}(${dayOfWeek}) ${item.timeVal}\n`;
     });
 
     document.getElementById("output").value = outputText.trim();
 });
 
-// テキスト保存
-document.getElementById("saveBtn").addEventListener("click", ()=>{
+// コピー機能
+document.getElementById("copyBtn").addEventListener("click", async ()=>{
     const text = document.getElementById("output").value;
     if(!text){
-        alert("まず日程を生成してください");
+        alert("まず日付と時間帯を入力してください");
         return;
     }
-    const blob = new Blob([text], {type:"text/plain"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "VST日程調整.txt";
-    a.click();
-    URL.revokeObjectURL(url);
+    await navigator.clipboard.writeText(text);
+    // alert("コピーしました！"); 
 });
 </script>
 </body>
