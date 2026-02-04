@@ -2,22 +2,149 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ツール集</title>
-<link rel="stylesheet" href="style.css"> <!-- 任意 -->
+<title>インサイドツール</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #fff;
+    color: #888; /* 本文グレー */
+    line-height: 1.8;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 40px auto;
+  }
+
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-title {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #777; /* 見出しグレー */
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 4px 0;
+  }
+
+  a {
+    color: #0066cc; /* はっきりリンク */
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #004c99; /* hoverで濃く */
+    text-decoration: underline;
+  }
+
+  .indent {
+    margin-left: 1.2em;
+  }
+
+  .note {
+    margin-top: 8px;
+  }
+</style>
 </head>
+
 <body>
-  <h1>ツール集</h1>
-  <p>下のリンクから各ツールにアクセスできます。</p>
-  
-  <ul>
-    <li><a href="00.日時計算(簡易).html">00.日時計算(簡易)</a></li>
-    <li><a href="0.面談候補日.html">面談候補日</a></li>
-    <li><a href="1.日程提示.html">1.日程提示</a></li>
-    <li><a href="2.アポ確定.html">2.アポ確定</a></li>
-    <li><a href="5.雑談.html">5.雑談</a></li>
-    <!-- ツール追加時はここに行を追加 -->
-  </ul>
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">インサイドツール</div>
+    使用方法 (1分解説💡)
+    <div class="note">
+      爆速で仕事をするために<br>
+      ・辞書登録
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">事前準備</div>
+    <ul>
+      <li>
+        ・最新のクローザーZoomリンク集をCSVダウンロード
+        <div class="indent">▶ <a href="#">リンク</a></div>
+      </li>
+      <li>
+        ・面談候補日を作成する
+        <div class="indent">▶ <a href="#">面談候補日</a></div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">定常業務</div>
+
+    <div>③ 日程調整</div>
+    <ul class="indent">
+      <li>▶ <a href="#">日程提示</a></li>
+      <li>▶ <a href="#">日程確定（アポ確定）</a></li>
+    </ul>
+
+    <div style="margin-top:12px;">④ 日程調整後のチャット</div>
+    <ul class="indent">
+      <li>▶ <a href="#">雑談</a></li>
+      <li>▶ <a href="#">雑談</a></li>
+    </ul>
+
+    <div style="margin-top:12px;">⑥ 未着対応</div>
+    <ul class="indent">
+      <li>▶ <a href="#">再調整</a></li>
+    </ul>
+
+    <div style="margin-top:12px;">⑧ その他・よく発生する事象</div>
+    <div class="indent">
+      （1on1トークが表示されない場合・審査落ち・複数申し込み）
+    </div>
+    <ul class="indent">
+      <li>▶ <a href="#">審査落ち、お断りテンプレート（実装中）</a></li>
+      <li>▶ <a href="#">複数申し込み</a></li>
+    </ul>
+
+    <div style="margin-top:12px;">⑨ ブロックリストの確認</div>
+    <ul class="indent">
+      <li>▶ <a href="#">ブロック者検出（実装中）</a></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">シフト業務</div>
+    <ul>
+      <li>
+        08:30～09:00
+        <div class="indent">▶ <a href="#">当日メッセージの送付</a></div>
+      </li>
+      <li>
+        15:00～16:00
+        <div class="indent">▶ <span>カレンダー予約での日程調整</span></div>
+      </li>
+      <li>
+        16:00～19:00
+        <div class="indent">▶ <a href="#">前日メッセージの送付</a></div>
+      </li>
+      <li>
+        19:00～22:00
+        <div class="indent">▶ <span>2日後のアポ振り確認</span></div>
+      </li>
+      <li>
+        23:00～24:00
+        <div class="indent">▶ <span>雑談抜けチェック</span></div>
+      </li>
+    </ul>
+  </div>
+
+</div>
 </body>
 </html>
-
