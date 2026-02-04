@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>日程確定（アポ確定）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+<h3>日程確定（アポ確定）</h3>
+
+<!-- CSVアップロード -->
+<input type="file" id="csvFile" accept=".csv">
+<hr>
+
+<!-- 入力欄 -->
+<label>LINE名：
+  <input type="text" id="lineName" rows="1" cols="50" placeholder="入力必須" style="background-color:#fff9c4;">
+  <button type="button" id="lineNameCopyBtn">コピー</button>
+</label><br>
+
+<label>面談日程：
+  <input type="text" id="meetingDate" rows="1" cols="50" placeholder="入力必須" style="background-color:#e8f5e9;">
+</label><br>
+
+<label>メモ：
+  <input type="text" id="source" rows="1" cols="50" placeholder="">
+</label><br>
+<hr>
+
+<!-- やること表示 -->
+<p>絶対やること</p>
+<ul>
+  <li><a href="https://docs.google.com/spreadsheets/d/1-jGXpUpUrfIHLbBuzeydGdYYr9v_J6QKynJKtLC5L7w/edit?gid=2079834522#gid=2079834522">クローザー日程</a>に記入</li>
+  <li>Ｇカレンダーに入力 (※メール送信忘れずに！)</li>
+  <li><a href="https://docs.google.com/spreadsheets/d/1-jGXpUpUrfIHLbBuzeydGdYYr9v_J6QKynJKtLC5L7w/edit?gid=82785762#gid=82785762">個別相談ステータス(広告)</a>に記入</li>
+</ul>
+<hr>
+
+<p>UTAGE画面</p>
+<ul>
+  <li>テンプレ送信より<span style="color:red;">【最新版】日程確定直後送付</span> を送信</li>
+  <li>Zoomリンク送信</li>
+  <li>雑談スタート</li>
+  <li>２つラベルを貼る<br>
+    <span style="font-weight:bold; background:yellow;">⭕日程確定（普通導線）</span><br>
+    <span style="font-weight:bold; background:yellow;">担当者名</span>
+  </li>
+  <li>メインアカウントに『サポート申込済』ラベル貼る</li>
+</ul>
+<hr>
+
+<!-- Zoomリンク送信用 -->
+<label>担当者：<br>
+  <select id="staffSelect">
+    <option value="">CSVを読み込んでください</option>
+  </select>
+</label><br><br>
+
+<textarea id="output" rows="10" cols="50"></textarea>
+<button id="copyBtn">コピー</button>
+
+<!-- 雑談質問 -->
+<textarea id="extraQuestion" rows="3" cols="50"></textarea>
+<button id="extraCopyBtn">コピー</button>
+
+<script>
+const csvFileInput = document.getElementById("csvFile");
+
+const lineNameInput = document.getElementById("lineName");
+const lineNameCopyBtn = document.getElementById("lineNameCopyBtn");
+const sourceInput = document.getElementById("source");
+const meetingDateInput = document.getElementById("meetingDate");
+
+const staffSelect = document.getElementById("staffSelect");
+const output = document.getElementById("output");
+
+const extraQuestion = document.getElementById("extraQuestion");
+const extraCopyBtn = document.getElementById("extraCopyBtn");
+
+let staffData = {};
+
+// CSV読み込み
+csvFileInput.addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+
+    Papa.parse(file, {
+        header: false,
+        skipEmptyLines: true,
+        complete: function(results){
+            staffData = {};
+            staffSelect.innerHTML = '<option value="">担当者を選択</option>';
+
+            results.data.forEach(row => {
+                const name = row[0]?.trim();
+                const url = row[1]?.trim();
+                if(name && url){
+                    staffData[name] = url;
+                    const opt = document.createElement("option");
+                    opt.value = name;
+                    opt.textContent = name;
+                    staffSelect.appendChild(opt);
+                }
+            });
+        }
+    });
+});
+
+// LINE名・面談日入力時
+lineNameInput.addEventListener("input", function(){
+    const name = lineNameInput.value.trim();
+    staffSelect.value = "";
+    sourceInput.value = "";
+    meetingDateInput.value = "";
+    output.value = "";
+
+    // 雑談質問生成
+    extraQuestion.value = name ? `${name}さんはこれまで副業やったことありますか？😊✨` : "";
+});
+
+// LINE名コピーボタン
+lineNameCopyBtn.addEventListener("click", function(){
+    if(!lineNameInput.value.trim()) return;
+    lineNameInput.select();
+    lineNameInput.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+});
+
+// プルダウン選択時にZoomリンク生成
+staffSelect.addEventListener("change", function(){
+    const name = staffSelect.value;
+    if(!name){
+        output.value = "";
+        return;
+    }
+
+    if(!lineNameInput.value.trim() || !meetingDateInput.value.trim()){
+        alert("LINE名と面談日程は必須です。入力してください！");
+        staffSelect.value = "";
+        output.value = "";
+        return;
+    }
+    const zoomUrl = staffData[name];
+    const dateStr = meetingDateInput.value;
+
+    output.value = `実施日：${dateStr}\n\n${zoomUrl}\n\n【無料プレゼントはこちら👇】\nhttps://forms.gle/i2XPWLVQE44iYc7b8`;
+});
+
+// 出力コピー
+document.getElementById("copyBtn").addEventListener("click", function(){
+    if(!output.value.trim()) return;
+    output.select();
+    output.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+});
+
+// 雑談コピー
+extraCopyBtn.addEventListener("click", function(){
+    if(!extraQuestion.value.trim()) return;
+    extraQuestion.select();
+    extraQuestion.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+});
+</script>
+
+</body>
+</html>
