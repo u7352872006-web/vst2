@@ -10,7 +10,6 @@
 <h3>当日メッセージの送付</h3>
 
 <input type="file" id="csvFile" accept=".csv">
-<p id="fileName">CSVを選択してください</p>
 <hr>
 
 <label>
@@ -29,8 +28,6 @@
 
 <script>
 const csvFileInput = document.getElementById("csvFile");
-const fileNameDisplay = document.getElementById("fileName");
-
 const staffSelect = document.getElementById("staffSelect");
 const output = document.getElementById("output");
 const copyBtn = document.getElementById("copyBtn");
@@ -60,7 +57,6 @@ csvFileInput.addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
 
-  fileNameDisplay.textContent = "読み込んだファイル: " + file.name;
   staffSelect.innerHTML = '<option value="">担当者を選択</option>';
   staffData = {};
 
