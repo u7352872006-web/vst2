@@ -2,38 +2,47 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>インサイドツール 横タブ版</title>
+<title>インサイドツール 左タブ極小版</title>
+
 <style>
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     margin: 0;
     background: #fff;
-    color: #888;
-    line-height: 1.6;
+    color: #777;
+    line-height: 1.4;
   }
 
+  /* 全体 */
   .container {
     display: flex;
-    flex-direction: column; /* 上から下 */
     height: 100vh;
   }
 
-  /* 横タブ */
+  /* 左タブ */
   .tab-list {
-    display: flex;            /* 横並び */
+    width: 160px;
     background: #f7f7f7;
-    border-bottom: 1px solid #ccc;
-    overflow-x: auto;         /* タブ多くてもOK */
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+    padding: 4px;
   }
 
   .tab-list button {
-    padding: 10px 14px;
+    display: block;
+    width: 100%;
+    padding: 4px 6px;
+    margin-bottom: 2px;
     border: none;
     background: #eee;
     cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;      /* 折り返さない */
-    border-right: 1px solid #ccc;
+    text-align: left;
+    font-size: 12px;
+    border-radius: 3px;
+  }
+
+  .tab-list button:hover {
+    background: #ddd;
   }
 
   .tab-list button.active {
@@ -42,6 +51,7 @@
     font-weight: bold;
   }
 
+  /* 右側 */
   .tab-content {
     flex: 1;
     position: relative;
@@ -52,11 +62,11 @@
     height: 100%;
     border: none;
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
   }
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -82,23 +92,25 @@
 </div>
 
 <script>
-const buttons = document.querySelectorAll('.tab-list button');
-const iframes = document.querySelectorAll('.tab-content iframe');
+  const buttons = document.querySelectorAll('.tab-list button');
+  const iframes = document.querySelectorAll('.tab-content iframe');
 
-buttons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    buttons.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-    const id = btn.dataset.id;
-    iframes.forEach(frame => {
-      frame.style.display = frame.id === id ? 'block' : 'none';
+      const id = btn.dataset.id;
+      iframes.forEach(frame => {
+        frame.style.display = frame.id === id ? 'block' : 'none';
+      });
     });
   });
-});
 
-// 初期表示
-if (buttons.length > 0) buttons[0].click();
+  // 初期表示
+  if (buttons.length > 0) {
+    buttons[0].click();
+  }
 </script>
 
 </body>
