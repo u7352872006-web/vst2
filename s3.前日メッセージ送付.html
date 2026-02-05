@@ -10,7 +10,6 @@
 <h3>前日メッセージの送付</h3>
 
 <input type="file" id="csvFile" accept=".csv">
-<p id="fileName">CSVを選択してください</p>
 <hr>
 
 <label>
@@ -48,8 +47,6 @@
 
 <script>
 const csvFileInput = document.getElementById("csvFile");
-const fileNameDisplay = document.getElementById("fileName");
-
 const meetingTimeInput = document.getElementById("meetingTime");
 const staffSelect = document.getElementById("staffSelect");
 const output = document.getElementById("output");
@@ -57,7 +54,7 @@ const copyBtn = document.getElementById("copyBtn");
 
 let staffData = {};
 
-// 生成処理を関数化
+// テキスト生成
 function generateText() {
   const staffName = staffSelect.value;
   const time = meetingTimeInput.value;
@@ -69,7 +66,7 @@ function generateText() {
 
   output.value =
 `お疲れ様です！
-明日の${meetingTimeInput.value}からは予定通りよろしくお願いします😊
+明日の${time}からは予定通りよろしくお願いします😊
 
 時間になったらご参加ください。
 
@@ -81,7 +78,6 @@ csvFileInput.addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
 
-  fileNameDisplay.textContent = "読み込んだファイル: " + file.name;
   staffSelect.innerHTML = '<option value="">担当者を選択</option>';
   staffData = {};
 
@@ -104,10 +100,10 @@ csvFileInput.addEventListener("change", e => {
   });
 });
 
-// 担当者変更時
+// 担当者変更
 staffSelect.addEventListener("change", generateText);
 
-// 面談時間変更時も再生成
+// 面談時間変更
 meetingTimeInput.addEventListener("change", generateText);
 
 // コピー
