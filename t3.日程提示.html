@@ -52,7 +52,7 @@
 
 <hr>
 
-<!-- メッセージA -->
+<!-- メッセージ -->
 <textarea
   id="messageA"
   rows="20"
@@ -60,39 +60,22 @@
 ></textarea>
 <button onclick="copyText('messageA')">コピー</button>
 
-<hr>
-
-<!-- メッセージB ラベル -->
-<div class="label">未着対応・再調整用</div>
-
-<textarea
-  id="messageB"
-  rows="15"
-  cols="35"
-  style="background-color:#e0e0e0;"
-></textarea>
-<button onclick="copyText('messageB')">コピー</button>
-
 <script>
 function copyText(id){
   const ta = document.getElementById(id);
   if(!ta.value.trim()) return;
-  ta.select();
-  ta.setSelectionRange(0, 99999);
-  document.execCommand("copy");
+  navigator.clipboard.writeText(ta.value);
 }
 
 // クリア
 document.getElementById("clearLineNameBtn").addEventListener("click", () => {
   document.getElementById("lineName").value = "";
   document.getElementById("messageA").value = "";
-  document.getElementById("messageB").value = "";
 });
 
 // LINE名変更時
 document.getElementById("lineName").addEventListener("input", () => {
   document.getElementById("messageA").value = "";
-  document.getElementById("messageB").value = "";
 });
 
 // 生成
@@ -113,21 +96,9 @@ ${dates}
 
 もし予定が合わない場合は再度調整しますね！`;
 
-  const messageB =
-`${displayName}さん！再度日程調整しますね！
-※参加希望の方が多いため、先着順になります
-
-${dates}
-
-上記でご都合の良いお日にちを教えてください！☺️
-
-もし予定が合わない場合は再度調整しますね！`;
-
   document.getElementById("messageA").value = messageA;
-  document.getElementById("messageB").value = messageB;
 });
 </script>
 
 </body>
 </html>
-
