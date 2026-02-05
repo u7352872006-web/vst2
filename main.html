@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>インサイドツール アコーディオンタブ（状態保持）</title>
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
+  background: #fff;
+  color: #333;
+}
+.tab-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+}
+.tab {
+  border-bottom: 1px solid #ccc;
+}
+.tab button {
+  width: 100%;
+  padding: 12px;
+  text-align: left;
+  background: #eee;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+.tab button.active {
+  background: #0066cc;
+  color: #fff;
+  font-weight: bold;
+}
+.tab-content {
+  display: none;
+  padding: 0;
+}
+.tab-content iframe {
+  width: 100%;
+  height: 400px; /* 必要に応じて調整 */
+  border: none;
+}
+</style>
+</head>
+<body>
+
+<div class="tab-container">
+
+  <div class="tab">
+    <button>面談候補日程を作成</button>
+    <div class="tab-content">
+      <iframe src="j1.面談候補日程.html"></iframe>
+    </div>
+  </div>
+
+  <div class="tab">
+    <button>日程提示（スタンプ対応）</button>
+    <div class="tab-content">
+      <iframe src="t3.日程提示.html"></iframe>
+    </div>
+  </div>
+
+  <div class="tab">
+    <button>日程確定（アポ確定）</button>
+    <div class="tab-content">
+      <iframe src="t3.日程確定.html"></iframe>
+    </div>
+  </div>
+
+  <div class="tab">
+    <button>雑談テンプレ</button>
+    <div class="tab-content">
+      <iframe src="t4.雑談テンプレ.html"></iframe>
+    </div>
+  </div>
+
+  <div class="tab">
+    <button>再調整</button>
+    <div class="tab-content">
+      <iframe src="t3.日程提示.html"></iframe>
+    </div>
+  </div>
+
+  <div class="tab">
+    <button>当日メッセージの送付</button>
+    <div class="tab-content">
+      <iframe src="s1.当日メッセージの送付.html"></iframe>
+    </div>
+  </div>
+
+  <div class="tab">
+    <button>前日メッセージの送付</button>
+    <div class="tab-content">
+      <iframe src="s3.前日メッセージ送付.html"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.tab');
+
+tabs.forEach(tab => {
+  const btn = tab.querySelector('button');
+  const content = tab.querySelector('.tab-content');
+
+  btn.addEventListener('click', () => {
+    const isActive = content.style.display === 'block';
+
+    // 開閉切り替え（状態保持）
+    if (isActive) {
+      content.style.display = 'none';
+      btn.classList.remove('active');
+    } else {
+      content.style.display = 'block';
+      btn.classList.add('active');
+    }
+  });
+});
+</script>
+
+</body>
+</html>
