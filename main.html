@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>インサイドツール 縦タブ版</title>
+<title>インサイドツール 横タブ版</title>
 <style>
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -14,25 +14,26 @@
 
   .container {
     display: flex;
-    flex-direction: column; /* 縦並び */
+    flex-direction: column; /* 上から下 */
     height: 100vh;
   }
 
+  /* 横タブ */
   .tab-list {
-    display: flex;
-    flex-direction: column; /* タブ縦並び */
+    display: flex;            /* 横並び */
     background: #f7f7f7;
     border-bottom: 1px solid #ccc;
+    overflow-x: auto;         /* タブ多くてもOK */
   }
 
   .tab-list button {
-    padding: 10px;
+    padding: 10px 14px;
     border: none;
     background: #eee;
     cursor: pointer;
-    text-align: left;
     font-size: 14px;
-    border-bottom: 1px solid #ccc;
+    white-space: nowrap;      /* 折り返さない */
+    border-right: 1px solid #ccc;
   }
 
   .tab-list button.active {
@@ -42,7 +43,7 @@
   }
 
   .tab-content {
-    flex: 1; /* 残りの縦スペースをiframeに */
+    flex: 1;
     position: relative;
   }
 
@@ -61,12 +62,12 @@
 <div class="container">
   <div class="tab-list">
     <button data-id="tab1">面談候補日程を作成</button>
-    <button data-id="tab2">日程提示（スタンプ対応）</button>
-    <button data-id="tab3">日程確定（アポ確定）</button>
+    <button data-id="tab2">日程提示</button>
+    <button data-id="tab3">日程確定</button>
     <button data-id="tab4">雑談テンプレ</button>
     <button data-id="tab5">再調整</button>
-    <button data-id="tab6">当日メッセージの送付</button>
-    <button data-id="tab7">前日メッセージの送付</button>
+    <button data-id="tab6">当日メッセージ</button>
+    <button data-id="tab7">前日メッセージ</button>
   </div>
 
   <div class="tab-content">
@@ -89,14 +90,14 @@ buttons.forEach(btn => {
     buttons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    const id = btn.getAttribute('data-id');
+    const id = btn.dataset.id;
     iframes.forEach(frame => {
       frame.style.display = frame.id === id ? 'block' : 'none';
     });
   });
 });
 
-// 最初のタブを表示
+// 初期表示
 if (buttons.length > 0) buttons[0].click();
 </script>
 
