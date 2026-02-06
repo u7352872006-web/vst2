@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>雑談テンプレ</title>
+
+<style>
+/* ★より上を固定 */
+.fixed-area {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 100;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+</style>
+
+</head>
+<body>
+
+<div class="fixed-area">
+  <h3>雑談テンプレ💭</h3>
+
+  <!-- LINE名 -->
+  <textarea
+    id="lineName"
+    rows="2"
+    cols="27"
+    placeholder="LINE名（お客さんの名前）"
+    style="background-color:#fff9c4;"
+  ></textarea>
+  <button type="button" onclick="clearLineName()">クリア</button>
+  <br>
+  <button onclick="generate()">生成</button>
+</div>
+
+<!-- ★ ここから下がスクロール -->
+<!-- 出力テキスト -->
+<p style="color: Gray; font-size: 15px;">--------------- １通目 ---------------</p>
+
+<p style="color: Black; font-size: 12px;">◼︎テンプレ文</p>
+<textarea id="out11" rows="5" cols="27"></textarea>
+<button onclick="copyText('out11')">コピー</button>
+<br><br>
+
+<p style="color: Black; font-size: 12px;">◼︎相手の反応がYES</p>
+<textarea id="out12" rows="5" cols="27"></textarea>
+<button onclick="copyText('out12')">コピー</button>
+<br><br>
+
+<p style="color: Black; font-size: 12px;">◼︎相手の反応がYES</p>
+<textarea id="out13" rows="5" cols="27"></textarea>
+<button onclick="copyText('out13')">コピー</button>
+<br><br>
+
+<p style="color: Black; font-size: 12px;">◼︎相手の反応がNO</p>
+<textarea id="out14" rows="5" cols="27"></textarea>
+<button onclick="copyText('out14')">コピー</button>
+<br><br>
+
+<p style="color: Gray; font-size: 15px;">--------------- ２通目 ---------------</p>
+
+<p style="color: Black; font-size: 12px;">◼︎テンプレ文</p>
+<textarea id="out21" rows="5" cols="27"></textarea>
+<button onclick="copyText('out21')">コピー</button>
+<br><br>
+
+<p style="color: Black; font-size: 12px;">◼︎相手の反応に対しての返答</p>
+<textarea id="out22" rows="7" cols="27"></textarea>
+<button onclick="copyText('out22')">コピー</button>
+<br><br>
+
+<textarea id="out23" rows="5" cols="27"></textarea>
+<button onclick="copyText('out23')">コピー</button>
+<br><br>
+
+<p style="color: Gray; font-size: 15px;">--------------- ３通目 ---------------</p>
+
+<p style="color: Black; font-size: 12px;">◼︎テンプレ文</p>
+<textarea id="out31" rows="5" cols="27"></textarea>
+<button onclick="copyText('out31')">コピー</button>
+<br><br>
+
+<p style="color: Black; font-size: 12px;">◼︎相手の反応に対しての返答</p>
+<p style="color: Black; font-size: 12px;">※相手が回答した金額を〜〜の部分で復唱する</p>
+<textarea id="out32" rows="5" cols="27"></textarea>
+<button onclick="copyText('out32')">コピー</button>
+<br><br>
+
+<p style="color: Gray; font-size: 15px;">--------------- ４通目 ---------------</p>
+
+<p style="color: Black; font-size: 12px;">◼︎テンプレ文</p>
+<textarea id="out41" rows="5" cols="27"></textarea>
+<button onclick="copyText('out41')">コピー</button>
+<br><br>
+
+<p style="color: Black; font-size: 12px;">◼︎相手から反応がない場合</p>
+<textarea id="out42" rows="5" cols="27"></textarea>
+<button onclick="copyText('out42')">コピー</button>
+<br><br>
+
+<p style="color: Gray; font-size: 15px;">--------------- ５通目 ---------------</p>
+
+<p style="color: Black; font-size: 12px;">◼︎テンプレ文</p>
+<textarea id="out51" rows="5" cols="27"></textarea>
+<button onclick="copyText('out51')">コピー</button>
+<br><br>
+
+<script>
+const textIds = [
+  "out11","out12","out13","out14",
+  "out21","out22","out23",
+  "out31","out32",
+  "out41","out42",
+  "out51"
+];
+
+document.getElementById("lineName").addEventListener("input", () => {
+  textIds.forEach(id => document.getElementById(id).value = "");
+});
+
+function clearLineName() {
+  document.getElementById("lineName").value = "";
+  textIds.forEach(id => document.getElementById(id).value = "");
+}
+
+function generate() {
+  const name = document.getElementById("lineName").value.trim();
+  if (!name) {
+    alert("LINE名を入力してください");
+    return;
+  }
+
+  document.getElementById("out11").value =
+`${name}さんはこれまで副業やったことありますか？😊✨`;
+  document.getElementById("out12").value =
+`そうなんですね！
+どんな副業をしていたんですか？`;
+  document.getElementById("out13").value =
+`実は僕らのところにくる人も昔副業で苦労した人が多いんでちょうどよかったです！`;
+  document.getElementById("out14").value =
+`なるほど！副業は初めてなんですね！
+副業を始めようとして僕のところにくる人も多いので、${name}さんちょうどよかったです！`;
+  document.getElementById("out21").value =
+`ちなみになんですけど、今回申し込んだ理由ってなんですか？
+実績が安心できそうだな、とか、スマホでもできそうだな、とか！`;
+  document.getElementById("out22").value =
+`あ、当日までに${name}さんのことが知りたいので、下のアンケート回答しておいてもらえたら！😊
+
+▼アンケートリンク
+https://forms.gle/i2XPWLVQE44iYc7b8`;
+  document.getElementById("out23").value =
+`早速回答さすがです！`;
+  document.getElementById("out31").value =
+`${name}さんは副業でどれくらいの額いきたいですか？`;
+  document.getElementById("out32").value =
+`〜〜！いいですね！
+それなら、スマホde動画編集はちょうどよかったです！`;
+  document.getElementById("out41").value =
+`スマホ動画編集についての動画送るんで
+ぜひ見ておいてください！
+https://youtu.be/96ffpXPY3G8`;
+  document.getElementById("out42").value =
+`見たら感想欲しいんですけど、どうです？`;
+  document.getElementById("out51").value =
+`よかったらこっちの動画も見てみてください😊
+https://youtu.be/U0uhMU_UpL4`;
+}
+
+function copyText(id) {
+  const text = document.getElementById(id);
+  text.select();
+  document.execCommand("copy");
+}
+</script>
+
+</body>
+</html>

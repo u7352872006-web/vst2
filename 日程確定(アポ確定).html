@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>日程確定(アポ確定)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+<h3>日程確定(アポ確定)</h3>
+
+
+
+<input type="file" id="csvFile" accept=".csv">
+<hr>
+<!-- クリアボタン -->
+<button type="button" id="clearBtn">クリア</button><br>
+
+<!-- LINE名 -->
+<textarea
+  id="lineName"
+  rows="2"
+  cols="27"
+  placeholder="LINE名"
+  style="background-color:#fff9c4;"
+></textarea>
+<button type="button" id="lineNameCopyBtn">コピー</button>
+<br>
+
+<!-- 面談日時 -->
+<textarea
+  id="meetingDate"
+  rows="2"
+  cols="27"
+  placeholder="面談日時"
+  style="background-color:#e8f5e9;"
+></textarea>
+<br>
+
+
+<!-- 媒体選択（初期値なし） -->
+<p style="font-size:12px; font-weight:bold;">流入経路：</p>
+<label style="font-size:14px;"><input type="radio" name="media" value="@080"> @080</label>
+<label style="font-size:14px;"><input type="radio" name="media" value="@851"> @851</label>
+<label style="font-size:14px;"><input type="radio" name="media" value="@004"> @004</label><br>
+<label style="font-size:14px;"><input type="radio" name="media" value="@521"> @521</label>
+<label style="font-size:14px;"><input type="radio" name="media" value="@608"> @608</label>
+<label style="font-size:14px;"><input type="radio" name="media" value="@108"> @108</label><br>
+<label style="font-size:14px;"><input type="radio" name="media" value="other"> その他</label>
+<br><br>
+
+
+<p style="font-size:12px; font-weight:bold;">カレンダータイトル：</p>
+<textarea
+  id="calendarTitle"
+  rows="3"
+  cols="27"
+  placeholder="カレンダータイトル"
+></textarea>
+<button type="button" id="calendarCopyBtn">コピー</button>
+<br>
+<hr>
+
+<!-- やること表示 -->
+<section style="font-size:12px; line-height:1.6;">
+  <p style="font-weight:bold;">やること</p>
+  <ul>
+    <li><span style="color:red; font-weight:bold;">クローザー日程</span>に記入</li>
+    <li><span style="color:red; font-weight:bold;">Ｇカレンダー</span>に入力、<span style="background:yellow; font-weight:bold;">メール送信✉</span></li>
+    <li><span style="color:red; font-weight:bold;">個別相談ステータス(広告)</span>に記入</li>
+  </ul>
+  <hr>
+
+  <p style="font-weight:bold;">UTAGE画面</p>
+  <ul>
+    <li><span style="color:red; font-weight:bold;">【最新版】日程確定直後送付</span> を送信</li>
+    <li><span style="color:red; font-weight:bold;">Zoomリンク</span> を送信</li>
+    <li>雑談スタート</li>
+    <li>ラベルを貼る<br>
+      <span style="font-weight:bold; background:yellow; padding:2px;">⭕日程確定（普通導線）</span><br>
+      <span style="font-weight:bold; background:yellow; padding:2px;">担当者名</span>
+    </li>
+    <li>メインアカウントに『サポート申込済』ラベル貼る</li>
+  </ul>
+</section>
+<hr>
+
+<p style="font-size:12px; font-weight:bold;">Zoomリンク：</p>
+<select id="staffSelect">
+  <option value="">CSVを読み込んでください</option>
+</select>
+<br><br>
+
+<textarea id="output" rows="12" cols="27"></textarea>
+<button id="copyBtn">コピー</button>
+<br>
+
+<p style="font-size:12px; font-weight:bold;">雑談スタート：</p>
+<textarea id="extraQuestion" rows="5" cols="27"></textarea>
+<button id="extraCopyBtn">コピー</button>
+
+
+
+<script>
+const csvFileInput = document.getElementById("csvFile");
+const lineNameInput = document.getElementById("lineName");
+const lineNameCopyBtn = document.getElementById("lineNameCopyBtn");
+const meetingDateInput = document.getElementById("meetingDate");
+
+const staffSelect = document.getElementById("staffSelect");
+const output = document.getElementById("output");
+
+const extraQuestion = document.getElementById("extraQuestion");
+const extraCopyBtn = document.getElementById("extraCopyBtn");
+
+const calendarTitleInput = document.getElementById("calendarTitle");
+const calendarCopyBtn = document.getElementById("calendarCopyBtn");
+
+const clearBtn = document.getElementById("clearBtn");
+
+let staffData = {};
+
+const mediaMap = {
+  "@080": "動画編集＠080uolh_",
+  "@851": "動画編集＠851nqhyd_",
+  "@004": "動画編集＠004uieyi_",
+  "@521": "動画編集＠521obscj_",
+  "@608": "動画編集＠608vwghp_",
+  "@108": "動画編集＠108kmcmr_",
+  "other": "動画編集＠"
+};
+
+// 初期化関数
+function resetAll() {
+  // ラジオ未選択
+  document.querySelectorAll('input[name="media"]').forEach(radio => radio.checked = false);
+  // カレンダータイトル空
+  calendarTitleInput.value = "";
+  // 担当者選択解除
+  staffSelect.value = "";
+  // Zoom出力空
+  output.value = "";
+  // 雑談質問空
+  extraQuestion.value = "";
+  // 面談日時空
+  meetingDateInput.value = "";
+}
+
+// カレンダータイトル生成（未選択時は空白）
+function updateCalendarTitle(){
+  const lineName = lineNameInput.value.trim();
+  const media = document.querySelector('input[name="media"]:checked')?.value;
+
+  if(!lineName || !media){
+    calendarTitleInput.value = "";
+    return;
+  }
+  calendarTitleInput.value = `${mediaMap[media]}${lineName}`;
+}
+
+// ラジオ変更
+document.querySelectorAll('input[name="media"]').forEach(radio=>{
+  radio.addEventListener("change", updateCalendarTitle);
+});
+
+// LINE名変更 → 全初期化 + 雑談質問生成
+lineNameInput.addEventListener("input", ()=>{
+  resetAll();
+  extraQuestion.value = lineNameInput.value
+    ? `${lineNameInput.value}さんはこれまで副業やったことありますか？😊✨`
+    : "";
+});
+
+// クリアボタン
+clearBtn.addEventListener("click", ()=>{
+  lineNameInput.value = "";
+  resetAll();
+});
+
+// コピー系
+calendarCopyBtn.onclick = ()=>{ if(!calendarTitleInput.value) return; calendarTitleInput.select(); document.execCommand("copy"); };
+lineNameCopyBtn.onclick = ()=>{ if(!lineNameInput.value) return; lineNameInput.select(); document.execCommand("copy"); };
+
+// CSV読み込み
+csvFileInput.addEventListener("change", e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+
+  Papa.parse(file,{
+    header:false,
+    skipEmptyLines:true,
+    complete:res=>{
+      staffData = {};
+      staffSelect.innerHTML = '<option value="">担当者を選択</option>';
+      res.data.forEach(r=>{
+        if(r[0] && r[1]){
+          staffData[r[0]] = r[1];
+          const o = document.createElement("option");
+          o.value = r[0];
+          o.textContent = r[0];
+          staffSelect.appendChild(o);
+        }
+      });
+    }
+  });
+});
+
+// Zoom文生成
+staffSelect.addEventListener("change", ()=>{
+  if(!lineNameInput.value || !meetingDateInput.value){
+    alert("LINE名と面談日時は必須です");
+    staffSelect.value = "";
+    output.value = "";
+    return;
+  }
+  output.value =
+`実施日：${meetingDateInput.value}
+
+${staffData[staffSelect.value]}
+
+【無料プレゼントはこちら👇】
+https://forms.gle/i2XPWLVQE44iYc7b8`;
+});
+
+// 出力コピー
+document.getElementById("copyBtn").onclick=()=>{ if(!output.value) return; output.select(); document.execCommand("copy"); };
+extraCopyBtn.onclick=()=>{ if(!extraQuestion.value) return; extraQuestion.select(); document.execCommand("copy"); };
+</script>
+
+</body>
+</html>

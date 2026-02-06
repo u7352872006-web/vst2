@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>日程作成3</title>
+
+<style>
+input[type="date"] {
+  color: #000;
+}
+
+input[type="date"]:not(:valid) {
+  color: #bbb;
+}
+</style>
+</head>
+
+<body>
+<h3>日程作成３📅</h3>
+
+<p>日付と時間を選択してください：</p>
+
+<script>
+const slots = ["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
+
+const timeOptions = [
+  "10:00～11:00",
+  "11:30～12:30",
+  "13:00～14:00",
+  "14:30～15:30",
+  "16:00～17:00",
+  "17:30～18:30",
+  "18:30～19:30",
+  "19:00～20:00",
+  "20:30～21:30",
+  "21:00～22:00",
+  "21:30～22:30",
+  "22:00～23:00"
+];
+</script>
+
+<form id="scheduleForm">
+  <div id="inputs"></div>
+  <br><br>
+  <button type="button" id="generateBtn">生成</button>
+  <button type="button" id="copyBtn">コピー</button>
+</form>
+
+<textarea id="output" rows="12" cols="25" readonly placeholder="ここに日程候補が表示されます"></textarea>
+
+<br><br>
+<button type="button" id="resetBtn">初期化</button>
+
+<script>
+// 入力欄を10個生成
+const inputsDiv = document.getElementById("inputs");
+for(let i=0;i<10;i++){
+    const label = document.createElement("label");
+    label.textContent = slots[i] + " ";
+
+    const dateInput = document.createElement("input");
+    dateInput.type = "date";
+    dateInput.id = "date" + i;
+    dateInput.required = true; // ← これが重要
+
+    const timeSelect = document.createElement("select");
+    timeSelect.id = "time" + i;
+
+    timeOptions.forEach(t=>{
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent = t;
+        timeSelect.appendChild(opt);
+    });
+
+    label.appendChild(dateInput);
+    label.appendChild(timeSelect);
+    inputsDiv.appendChild(label);
+    inputsDiv.appendChild(document.createElement("br"));
+}
+
+// 日程生成
+document.getElementById("generateBtn").addEventListener("click", ()=>{
+    const week = ["日","月","火","水","木","金","土"];
+    let items = [];
+
+    for(let i=0;i<10;i++){
+        const dateVal = document.getElementById("date"+i).value;
+        const timeVal = document.getElementById("time"+i).value;
+        if(dateVal){
+            items.push({
+                dateObj: new Date(dateVal),
+                timeVal
+            });
+        }
+    }
+
+    items.sort((a,b)=>{
+        const diff = a.dateObj - b.dateObj;
+        if(diff !== 0) return diff;
+
+        const toMinutes = t => {
+            const [h,m] = t.split("～")[0].split(":").map(Number);
+            return h*60 + m;
+        };
+        return toMinutes(a.timeVal) - toMinutes(b.timeVal);
+    });
+
+    let outputText = "";
+    items.forEach((item, idx)=>{
+        const d = item.dateObj;
+        outputText += `${slots[idx]} ${d.getMonth()+1}/${d.getDate()}(${week[d.getDay()]}) ${item.timeVal}\n`;
+    });
+
+    document.getElementById("output").value = outputText.trim();
+});
+
+// コピー
+document.getElementById("copyBtn").addEventListener("click", async ()=>{
+    const text = document.getElementById("output").value;
+    if(!text){
+        alert("まず日付と時間帯を入力してください");
+        return;
+    }
+    await navigator.clipboard.writeText(text);
+});
+
+// 初期化
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+    for(let i=0;i<10;i++){
+        document.getElementById("date"+i).value = "";
+        document.getElementById("time"+i).selectedIndex = 0;
+    }
+    document.getElementById("output").value = "";
+});
+</script>
+</body>
+</html>

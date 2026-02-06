@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>雑談チャットGPTs</title>
+</head>
+
+<body>
+
+<h3>雑談チャットGPTs</h3>
+
+<button id="clearBtn">クリア</button>
+<br>
+<textarea
+  id="lineName"
+  rows="2"
+  cols="27"
+  placeholder="LINE名（お客さんの名前）"
+  style="background-color:#fff9c4;"
+></textarea>
+
+<br><br>
+
+<textarea
+  id="content"
+  rows="15"
+  cols="27"
+  placeholder="顧客対応チャット生成GPTsの結果を入力してください"
+></textarea>
+<br>
+
+<button id="generateBtn">生成</button>
+<br>
+<br>
+<hr>
+
+<p style="font-size:12px; font-weight:bold;">テキスト（編集可）</p>
+<textarea
+  id="output"
+  rows="20"
+  cols="27"
+  placeholder="テキスト（編集可）"
+></textarea>
+<button id="copyBtn">コピー</button>
+
+<script>
+const lineNameEl = document.getElementById('lineName');
+const contentEl  = document.getElementById('content');
+const outputEl   = document.getElementById('output');
+
+const generateBtn = document.getElementById('generateBtn');
+const clearBtn    = document.getElementById('clearBtn');
+const copyBtn     = document.getElementById('copyBtn');
+
+// 生成
+generateBtn.addEventListener('click', () => {
+  const name = lineNameEl.value.trim();
+  const content = contentEl.value;
+
+  if (!name) {
+    alert('LINE名を入力してください。');
+    return;
+  }
+  if (!content) {
+    alert('内容を入力してください。');
+    return;
+  }
+
+  // 「○○」「〇〇」「◯◯」「○ ○」などをまとめて置換
+  const circlePairRegex = /[\u25CB\u3007\u25EF]\s*[\u25CB\u3007\u25EF]/g;
+
+  let replaced = content.replace(circlePairRegex, name);
+
+  // 保険
+  replaced = replaced.replace(/○○/g, name);
+
+  outputEl.value = replaced;
+});
+
+// クリア（全項目）
+clearBtn.addEventListener('click', () => {
+  lineNameEl.value = '';
+  contentEl.value = '';
+  outputEl.value = '';
+});
+
+// コピー
+copyBtn.addEventListener('click', async () => {
+  const text = outputEl.value;
+  if (!text.trim()) return;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      outputEl.select();
+      document.execCommand('copy');
+    }
+  } else {
+    outputEl.select();
+    document.execCommand('copy');
+  }
+});
+</script>
+
+</body>
+</html>
