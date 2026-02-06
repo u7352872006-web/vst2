@@ -18,8 +18,6 @@ input[type="date"]:not(:valid) {
 <body>
 <h3>日程作成３📅</h3>
 
-<p>日付と時間を選択してください：</p>
-
 <script>
 const slots = ["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
 
@@ -41,14 +39,14 @@ const timeOptions = [
 
 <form id="scheduleForm">
   <div id="inputs"></div>
-  <br><br>
+  <br>
   <button type="button" id="generateBtn">生成</button>
   <button type="button" id="copyBtn">コピー</button>
 </form>
 
 <textarea id="output" rows="12" cols="25" readonly placeholder="ここに日程候補が表示されます"></textarea>
-
-<br><br>
+<br>
+<br>
 <button type="button" id="resetBtn">初期化</button>
 
 <script>
