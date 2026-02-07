@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>メモ帳</title>
+</head>
+<body>
+
+<h3>メモ帳</h3>
+<hr>
+
+<!-- メモ1 -->
+<p style="color: black; font-size: 12px;">メモ1</p>
+<textarea id="memo1" rows="10" cols="30" placeholder=""></textarea><br>
+<button onclick="clearMemo('memo1')">クリア</button>
+<button onclick="copyMemo('memo1')">コピー</button>
+<br>
+<button onclick="downloadMemo('memo1', 1)">ファイル保存</button>
+<hr>
+
+<!-- メモ2 -->
+<p style="color: black; font-size: 12px;">メモ2</p>
+<textarea id="memo2" rows="10" cols="30" placeholder=""></textarea><br>
+<button onclick="clearMemo('memo2')">クリア</button>
+<button onclick="copyMemo('memo2')">コピー</button>
+<br>
+<button onclick="downloadMemo('memo2', 2)">ファイル保存</button>
+<hr>
+
+
+<!-- メモ3 -->
+<p style="color: black; font-size: 12px;">メモ3</p>
+<textarea id="memo3" rows="10" cols="30" placeholder=""></textarea><br>
+<button onclick="clearMemo('memo3')">クリア</button>
+<button onclick="copyMemo('memo3')">コピー</button>
+<br>
+<button onclick="downloadMemo('memo3', 3)">ファイル保存</button>
+
+
+<script>
+// クリア関数（確認付き）
+function clearMemo(id) {
+  if (confirm('本当にクリアしますか？')) {
+    document.getElementById(id).value = '';
+  }
+}
+
+// コピー関数（アラートなし）
+function copyMemo(id) {
+  const textEl = document.getElementById(id);
+  textEl.select();
+  document.execCommand('copy');
+}
+
+// 保存関数
+function downloadMemo(id, num) {
+  const content = document.getElementById(id).value;
+  if (!content.trim()) {
+    alert('メモが空です');
+    return;
+  }
+
+  const date = new Date();
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const yyyymmdd = `${yyyy}${mm}${dd}`;
+
+  const fileName = `メモ${num}-${yyyymmdd}.txt`;
+
+  const blob = new Blob([content], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fileName;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+
+</body>
+</html>
