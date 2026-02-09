@@ -188,7 +188,7 @@ document.querySelectorAll('input[name="media"]').forEach(radio=>{
 lineNameInput.addEventListener("input", ()=>{
   resetAll();
   extraQuestion.value = lineNameInput.value
-    ? `${lineNameInput.value}さんはこれまで副業やったことありますか？😊✨`
+    ? `${lineNameInput.value}さんはこれまで副業やったことありますか？`
     : "";
 });
 
@@ -250,5 +250,6 @@ extraCopyBtn.onclick=()=>{ if(!extraQuestion.value) return; extraQuestion.select
 
 </body>
 </html>
+
 
 
