@@ -24,21 +24,20 @@
 <textarea
   id="content"
   rows="15"
-  cols="27"
-  placeholder="顧客対応チャット生成GPTsの結果を入力してください"
+  cols="35"
+  placeholder="顧客対応チャット生成GPTsの結果を入力してください。『〇〇さん』の部分をお客様の名前に置き換えます。"
 ></textarea>
 <br>
 
 <button id="generateBtn">生成</button>
 <br>
 <br>
-<hr>
 
 <p style="font-size:12px; font-weight:bold;">テキスト（編集可）</p>
 <textarea
   id="output"
   rows="20"
-  cols="27"
+  cols="35"
   placeholder="テキスト（編集可）"
 ></textarea>
 <button id="copyBtn">コピー</button>
@@ -105,3 +104,4 @@ copyBtn.addEventListener('click', async () => {
 
 </body>
 </html>
+
