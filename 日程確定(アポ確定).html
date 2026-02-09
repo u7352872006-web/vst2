@@ -8,17 +8,9 @@
 <body>
 
 <h3>日程確定(アポ確定)</h3>
-  
-<!-- CSV作り方リンク -->
-<a
-  href="https://www.loom.com/share/206c56f599f84ba1aed34ff241102d75"
-  target="_blank"
-  style="font-size:8pt; display:inline-block; margin-bottom:6px;"
->
-  💡 CSVファイルの作り方
-</a>
-<br>
-  
+
+
+
 <input type="file" id="csvFile" accept=".csv">
 <hr>
 <!-- クリアボタン -->
@@ -48,64 +40,77 @@
 
 <!-- 媒体選択（初期値なし） -->
 <p style="font-size:12px; font-weight:bold;">流入経路：</p>
-<label style="font-size:14px;"><input type="radio" name="media" value="@080"> @080</label>
-<label style="font-size:14px;"><input type="radio" name="media" value="@851"> @851</label>
-<label style="font-size:14px;"><input type="radio" name="media" value="@004"> @004</label><br>
-<label style="font-size:14px;"><input type="radio" name="media" value="@521"> @521</label>
-<label style="font-size:14px;"><input type="radio" name="media" value="@608"> @608</label>
-<label style="font-size:14px;"><input type="radio" name="media" value="@108"> @108</label><br>
-<label style="font-size:14px;"><input type="radio" name="media" value="other"> その他</label>
+<label style="font-size:12px;"><input type="radio" name="media" value="@080"> カズマル@オンライン個別サポート用（Meta1）@080</label><br>
+<label style="font-size:12px;"><input type="radio" name="media" value="@851"> カズマル@オンライン個別サポート用（Meta2）@851</label><br>
+<label style="font-size:12px;"><input type="radio" name="media" value="@521"> カズマル@オンライン個別サポート用（YT）@521</label><br>
+<label style="font-size:12px;"><input type="radio" name="media" value="@004"> カズマル@オンライン個別サポート用（TikTok）@004</label><br>
+<label style="font-size:12px;"><input type="radio" name="media" value="@608"> カズマル｜AI動画編集 個別サポート @608</label><br>
+<label style="font-size:12px;"><input type="radio" name="media" value="@108"> カズマル：スマホ副業個別サポート@108</label><br>
+<label style="font-size:12px;"><input type="radio" name="media" value="other"> その他</label>
 <br><br>
-
-
-<p style="font-size:12px; font-weight:bold;">カレンダータイトル：</p>
-<textarea
-  id="calendarTitle"
-  rows="3"
-  cols="27"
-  placeholder=""
-></textarea>
-<button type="button" id="calendarCopyBtn">コピー</button>
-<br>
 <hr>
 
 <!-- やること表示 -->
 <section style="font-size:12px; line-height:1.6;">
   <p style="font-weight:bold;">やること</p>
   <ul>
-    <li><span style="color:red; font-weight:bold;">クローザー日程</span>に記入</li>
-    <li><span style="color:red; font-weight:bold;">Ｇカレンダー</span>に入力、<span style="background:yellow; font-weight:bold;">メール送信✉</span></li>
-    <li><span style="color:red; font-weight:bold;">個別相談ステータス(広告)</span>に記入</li>
+    <li>
+        <span style="color:red; font-weight:bold;">クローザー日程</span>に記入<br>
+          <select id="staffSelect">
+            <option value="">CSVを読み込んでください</option>
+          </select><br>
+          <br>
+          <br>
+    </li>
+    <li>
+        <span style="color:red; font-weight:bold;">Ｇカレンダー</span>に面談予定を入力<br>
+        <span style="background:yellow; font-weight:bold;">✉メール送信✉</span>
+        <p style="font-size:10px;">カレンダータイトル：</p>
+          <textarea
+            id="calendarTitle"
+            rows="3"
+            cols="27"
+            placeholder=""
+          ></textarea>
+          <button type="button" id="calendarCopyBtn">コピー</button>
+          <br>
+          <br>
+    </li>
+    <li>
+        <span style="color:red; font-weight:bold;">個別相談ステータス(広告)</span>に記入
+    </li>
   </ul>
+  <br>
   <hr>
 
   <p style="font-weight:bold;">UTAGE画面</p>
   <ul>
-    <li><span style="color:red; font-weight:bold;">【最新版】日程確定直後送付</span> を送信</li>
-    <li><span style="color:red; font-weight:bold;">Zoomリンク</span> を送信</li>
-    <li>雑談スタート</li>
     <li>ラベルを貼る<br>
       <span style="font-weight:bold; background:yellow; padding:2px;">⭕日程確定（普通導線）</span><br>
-      <span style="font-weight:bold; background:yellow; padding:2px;">担当者名</span>
+      <span style="font-weight:bold; background:yellow; padding:2px;">担当者名</span><br>
+      <br>
     </li>
-    <li>メインアカウントに『サポート申込済』ラベル貼る</li>
+    <li>
+        <span style="color:red; font-weight:bold;">【最新版】日程確定直後送付</span> を送信
+        <br>
+        <br>
+    </li>
+    <li>
+        Zoomリンクを送信<br>
+        <textarea id="output" rows="12" cols="27"></textarea>
+        <button id="copyBtn">コピー</button>
+        <br>
+        <br>
+    </li>
+    <li>雑談スタート<br>
+        <textarea id="extraQuestion" rows="5" cols="27"></textarea>
+        <button id="extraCopyBtn">コピー</button>
+        <br>
+        <br>
+    </li>
+    <li>メインアカウントに<span style="color:red; font-weight:bold;">『サポート申込済』</span>ラベル貼る</li><br><br>
   </ul>
 </section>
-<hr>
-
-<p style="font-size:12px; font-weight:bold;">Zoomリンク：</p>
-<select id="staffSelect">
-  <option value="">CSVを読み込んでください</option>
-</select>
-<br><br>
-
-<textarea id="output" rows="12" cols="27"></textarea>
-<button id="copyBtn">コピー</button>
-<br>
-
-<p style="font-size:12px; font-weight:bold;">雑談スタート：</p>
-<textarea id="extraQuestion" rows="5" cols="27"></textarea>
-<button id="extraCopyBtn">コピー</button>
 
 
 
@@ -131,11 +136,11 @@ let staffData = {};
 const mediaMap = {
   "@080": "動画編集＠080uolh_",
   "@851": "動画編集＠851nqhyd_",
-  "@004": "動画編集＠004uieyi_",
   "@521": "動画編集＠521obscj_",
-  "@608": "動画編集＠608vwghp_",
+  "@004": "動画編集＠004uieyi_",
+  "@608": "AI動画編集＠608vwghp_",
   "@108": "動画編集＠108kmcmr_",
-  "other": "動画編集＠"
+  "other": ""
 };
 
 // 初期化関数
@@ -237,5 +242,3 @@ extraCopyBtn.onclick=()=>{ if(!extraQuestion.value) return; extraQuestion.select
 
 </body>
 </html>
-
-
