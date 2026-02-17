@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ブロック者検出</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+<h3>ブロック者検出</h3>
+
+<p style="font-size: 14px; color: Black;">【Step１】</p>
+<p style="font-size: 12px; color: Black;">UTAGEの各個別サポートの『LINE 友だち一覧』から<br>
+    CSVファイルをダウンロード</p>
+<p style="font-size: 12px; color: Red;">わかりやすいようにファイル名を変更</p>
+<p style="font-size: 12px; color: Black;">例：004アカウントから取得した場合 → `004` など</p>
+<br>
+<hr>
+
+<p style="font-size: 14px; color: black;">【Step２】</p>
+<input type="file" id="csvFiles" multiple accept=".csv">
+<p style="font-size: 12px; color: Black;">CSVファイルを複数選択可能です</p>
+<br>
+<hr>
+
+<p style="font-size: 14px; color: black;">【Step３】</p>
+<p style="font-size: 13px; color: Red;">前回の調査日時を入力：</p>
+<p style="font-size: 12px; color: black;">
+  <a href="https://docs.google.com/spreadsheets/d/1GB2Qmu-VPNN0RJsSy6XfM1ekbKP9IvHNc5-UKuVGghg/edit?gid=0#gid=0" target="_blank" style="color: blue;">ブロック者発見シート</a>のB2セルの日時を入力
+</p>
+<input type="datetime-local" id="startDateTime">
+<p style="font-size: 12px; color: black;">
+  ↑この日時以降にブロックした人を検出します
+</p>
+<br>
+<hr>
+
+<p style="font-size: 14px; color: black;">【Step４】</p>
+<button onclick="extractAndDownload()">検出</button><br>
+<p style="font-size: 12px; color: black;">
+  結果がテキストファイルで自動ダウンロードされます!<br><br>
+  ファイル名：ブロック者_YYYYMMDD.txt<br>
+  ※YYYYMMDDは年月日
+</p>
+<br>
+<hr>
+
+<p style="font-size: 14px; color: black;">【Step５】</p>
+<p style="font-size: 13px; color: Red;">調査日時を更新：</p>
+<p style="font-size: 12px; color: black;">
+  <a href="https://docs.google.com/spreadsheets/d/1GB2Qmu-VPNN0RJsSy6XfM1ekbKP9IvHNc5-UKuVGghg/edit?gid=0#gid=0" target="_blank" style="color: blue;">ブロック者発見シート</a>のB2セルに以下をコピペ
+</p>
+<textarea id="earliest" cols="20" rows="1" readonly></textarea>
+<button onclick="copyEarliest()">コピー</button>
+<br><br>
+<hr>
+
+<p style="font-size: 14px; color: Black;">【Step６】</p>
+<p style="font-size: 12px; color: Black;">ブロック者の『配信停止』処理を行う</p>
+<p style="font-size: 12px; color: Red;">未実施の面談実施予定があった場合、<br>以下処理も行う</p>
+<section style="font-size:12px; line-height:1.6;">
+  <ul>
+    <li>クローザー日程を「1」に戻す</li>
+    <li>Googleカレンダーの面談予定を削除</li>
+    <li>個別相談ステータス（広告）のステータスを「先方都合キャンセル」にする</li>
+  </ul>
+</section>
+<br><br>
+
+
+<script>
+function setInitialStartDate() {
+    const d = new Date();
+    d.setDate(d.getDate()-1);
+    d.setHours(0,0,0,0);
+    document.getElementById("startDateTime").value = d.toISOString().slice(0,16);
+}
+window.onload = setInitialStartDate;
+
+function formatDate(d){
+    return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function earliestToYYYYMMDD(str){
+    if(!str) return "";
+    const d = new Date(str.replace(/\//g,'-'));
+    if(isNaN(d)) return "";
+    return d.getFullYear()
+        + String(d.getMonth()+1).padStart(2,'0')
+        + String(d.getDate()).padStart(2,'0');
+}
+
+async function extractAndDownload(){
+    const files = document.getElementById("csvFiles").files;
+    if(!files.length){alert("CSVファイルを選択（複数可）"); return;}
+    const start = new Date(document.getElementById("startDateTime").value);
+    if(isNaN(start)){alert("開始日時を入力してください"); return;}
+
+    let output="", earliest=null;
+
+    for(const file of files){
+        const text = new TextDecoder("shift_jis").decode(await file.arrayBuffer());
+        const parsed = Papa.parse(text, {skipEmptyLines:true}).data;
+        if(parsed.length<=1) continue;
+        const header = parsed[0].map(h=>h.trim().replace(/\uFEFF/g,""));
+        const idxLine=header.indexOf("LINE登録名"), idxStatus=header.indexOf("ステータス"), idxBlock=header.indexOf("ブロック日時");
+
+        output += "--------------------------\n"+file.name+"\n--------------------------\n";
+        let count=0;
+        parsed.slice(1).forEach(r=>{
+            if((r[idxStatus]||"").includes("ブロック")){
+                const bd = new Date((r[idxBlock]||"").replace(/-/g,'/'));
+                if(bd>=start){output+=`${r[idxLine]||""}\n`; count++;}
+            }
+        });
+        output += `■ブロック件数: ${count}\n\n`;
+
+        const fTime = new Date(file.lastModified);
+        if(!earliest || fTime<earliest) earliest=fTime;
+    }
+
+    const earliestText = earliest ? formatDate(earliest) : "";
+    document.getElementById("earliest").value = earliestText;
+
+    if(output.trim()){
+        const blob = new Blob([output],{type:"text/plain;charset=Shift_JIS"});
+        const url = URL.createObjectURL(blob);
+
+        const filename = earliestText
+            ? `ブロック者_${earliestToYYYYMMDD(earliestText)}.txt`
+            : "ブロック者.txt";
+
+        const a=document.createElement("a");
+        a.href=url;
+        a.download=filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+}
+
+function copyEarliest(){
+    const t=document.getElementById("earliest");
+    t.select();
+    document.execCommand("copy");
+}
+</script>
+
+</body>
+</html>
