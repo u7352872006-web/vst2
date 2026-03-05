@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>雑談テンプレ2</title>
+
+<style>
+/* ★より上を固定 */
+.fixed-area {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 100;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+</style>
+
+</head>
+<body>
+
+<div class="fixed-area">
+  <h3>雑談テンプレ2</h3>
+  <p>アップセル用アカウントの雑談<br>＠758、＠108</p>
+  <button onclick="generate()">生成</button>
+</div>
+
+<!-- ★ ここから下がスクロール -->
+<!-- 出力テキスト -->
+<p style="color: Gray; font-size: 15px;">─── ✦ 1通目 ✦ ───</p>
+
+<p style="color: Black; font-size: 12px;">◼︎1通目</p>
+<textarea id="out11" rows="5" cols="27"></textarea>
+<button onclick="copyText('out11')">コピー</button>
+<br><br>
+
+<p style="color: Black; font-size: 12px;">◼︎相手の反応に対しての返答</p>
+<textarea id="out12" rows="5" cols="27"></textarea>
+<button onclick="copyText('out12')">コピー</button>
+<br><br>
+
+<p style="color: Gray; font-size: 15px;">─── ✦ 2通目 ✦ ───</p>
+
+<p style="color: Black; font-size: 12px;">◼︎2通目</p>
+<textarea id="out21" rows="5" cols="27"></textarea>
+<button onclick="copyText('out21')">コピー</button>
+<br><br>
+<br><br>
+
+<script>
+const textIds = [
+  "out11","out12",
+  "out21"
+];
+
+function generate() {
+  // LINE名チェックは削除
+  document.getElementById("out11").value =
+`スマホ講座やってみてどうでしたか？`;
+  document.getElementById("out12").value =
+`もう基礎はバッチリです！
+きちんと終わらせられてすごいです！`;
+  document.getElementById("out21").value =
+`今回、申し込みしてくれたのはなぜですか？🧐`;
+}
+
+function copyText(id) {
+  const text = document.getElementById(id);
+  text.select();
+  document.execCommand("copy");
+}
+</script>
+
+</body>
+</html>
+
