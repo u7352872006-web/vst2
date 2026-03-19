@@ -4,7 +4,6 @@ export async function initCloserSelect(targetId, inputId, onChangeCallback) {
     const urlInput = document.getElementById(inputId);
 
     const colors = {
-    const colors = {
         "トップセールス": "#FFF0F0", // 極薄ピンク
         "2軍": "#F0F7FF",          // 極薄水色
         "3軍": "#FFFFF0",          // 極薄黄色
