@@ -1,39 +1,51 @@
 export async function initCloserSelect(targetId, inputId, onChangeCallback) {
-    const API_URL = "https://script.google.com/macros/s/AKfycbySHVscjhTYWKf8bLJUGIMJ7AArbsp8cS8wl0O8FyYjYoO2mRzMO8jZhcc_cmhDvYfIhA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxb282oIXg6UrpqJ1MM2txXEriwJnq8nHiUFqZTpyoI8FJ4zOHFjrQKvqnDhteA9qTl/exec";
     const container = document.getElementById(targetId);
     const urlInput = document.getElementById(inputId);
 
+    // 文字の見やすさを最優先した超薄いパステルカラー
+    const rankOrder = ["トップセールス", "2軍", "3軍", "研修生", "審査落ち"];
     const colors = {
         "トップセールス": "#FFF0F0", // 極薄ピンク
         "2軍": "#F0F7FF",          // 極薄水色
         "3軍": "#FFFFF0",          // 極薄黄色
-        "育成枠": "#F2F9F2",        // 極薄緑
-        "審査落のみ": "#F5F0FF"       // 極薄紫
+        "研修生": "#F2F9F2",        // 極薄緑
+        "審査落ち": "#F5F0FF"       // 極薄紫
     };
-    const rankOrder = Object.keys(colors);
 
     try {
         const response = await fetch(API_URL);
         const data = await response.json();
 
-        const select = document.createElement('select');
-        select.style.backgroundColor = "#ffffff";
-        
-        // オプション生成（初期値 + フィルタリング & ソート済みデータ）
-        const optionsHtml = [
-            '<option value="" style="background-color: #ffffff;">選択してください</option>',
-            ...data
-                .filter(item => item.rank !== "引退")
-                .sort((a, b) => rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank))
-                .map(item => `<option value="${item.zoom}" style="background-color: ${colors[item.rank] || "#ffffff"};">${item.name}（${item.rank}）</option>`)
-        ].join('');
+        const filtered = data
+            .filter(item => item.rank !== "引退")
+            .sort((a, b) => rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank));
 
-        select.innerHTML = optionsHtml;
+        const select = document.createElement('select');
+        select.style.width = "100%";
+        select.style.padding = "10px";
+        select.style.backgroundColor = "#ffffff";
+        select.innerHTML = '<option value="">▼ 担当者を選択してください</option>';
+
+        filtered.forEach(item => {
+            const option = document.createElement('option');
+            option.textContent = `${item.name}（${item.rank}）`;
+            option.value = item.zoom;
+            option.style.backgroundColor = colors[item.rank] || "#ffffff";
+            select.appendChild(option);
+        });
 
         select.addEventListener('change', function() {
-            if (urlInput) urlInput.value = this.value;
-            // 選択されたoptionの背景色を即座に反映（「選択してください」は#ffffffが適用される）
-            this.style.backgroundColor = this.options[this.selectedIndex].style.backgroundColor;
+            const selectedOption = this.options[this.selectedIndex];
+            if (urlInput) urlInput.value = this.value; 
+
+            // 色の連動（未選択時は白、選択時は薄色）
+            if (this.selectedIndex === 0) {
+                this.style.backgroundColor = "#ffffff";
+            } else {
+                this.style.backgroundColor = selectedOption.style.backgroundColor;
+            }
+
             if (onChangeCallback) onChangeCallback();
         });
 
@@ -41,6 +53,7 @@ export async function initCloserSelect(targetId, inputId, onChangeCallback) {
         container.appendChild(select);
 
     } catch (err) {
-        container.innerHTML = 'エラー';
+        container.innerHTML = '<span style="color:red;">読み込みエラー</span>';
+        console.error(err);
     }
 }
