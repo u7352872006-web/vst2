@@ -1,64 +1,47 @@
-class ClosersModule extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.data = [];
-  }
+export async function initCloserSelect(targetId, inputId, onChangeCallback) {
+    const API_URL = "https://script.google.com/macros/s/AKfycbySHVscjhTYWKf8bLJUGIMJ7AArbsp8cS8wl0O8FyYjYoO2mRzMO8jZhcc_cmhDvYfIhA/exec";
+    const container = document.getElementById(targetId);
+    const urlInput = document.getElementById(inputId);
 
-  connectedCallback() {
-    this.url = this.getAttribute("url"); // Apps Script URL
-    this.renderBase();
-    this.loadData();
-  }
+    const rankOrder = ["トップセールス", "2軍", "3軍", "育成枠", "審査落のみ"];
+    const colors = {
+        "トップセールス": "#F4CCCC",
+        "2軍": "#CFE2F3",
+        "3軍": "#FFF2CC",
+        "育成枠": "#D9EAD3",
+        "審査落のみ": "#B4A7D6"
+    };
 
-  renderBase() {
-    this.shadowRoot.innerHTML = `
-      <input id="search" type="text" placeholder="名前検索">
-      <div id="list" style="margin-bottom:8px;"></div>
-      <label>Zoomリンク:</label>
-      <input id="zoom" type="text" readonly style="width:100%;">
-      <style>
-        input { width: 100%; padding: 6px; margin-bottom: 4px; }
-        .item { padding: 6px; cursor: pointer; border-bottom: 1px solid #eee; }
-        .item:hover { background: #f0f0f0; }
-      </style>
-    `;
-
-    this.shadowRoot.querySelector("#search")
-      .addEventListener("input", e => this.renderList(e.target.value));
-  }
-
-  async loadData() {
     try {
-      const res = await fetch(this.url);
-      this.data = await res.json(); // Apps ScriptからJSON取得
-      this.renderList("");
-    } catch(e) {
-      console.error("データ取得エラー:", e);
-      this.shadowRoot.querySelector("#list").textContent = "データ取得に失敗しました";
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        const filtered = data
+            .filter(item => item.rank !== "引退")
+            .sort((a, b) => rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank));
+
+        const select = document.createElement('select');
+        select.innerHTML = '<option value="">選択してください</option>';
+
+        filtered.forEach(item => {
+            const option = document.createElement('option');
+            option.textContent = `${item.name}（${item.rank}）`;
+            option.value = item.zoom;
+            option.style.backgroundColor = colors[item.rank] || "#ffffff";
+            select.appendChild(option);
+        });
+
+        select.addEventListener('change', function() {
+            urlInput.value = this.value; 
+            this.style.backgroundColor = this.options[this.selectedIndex].style.backgroundColor;
+            if (onChangeCallback) onChangeCallback();
+        });
+
+        // 読み込み完了後に中身を入れ替える
+        container.innerHTML = '';
+        container.appendChild(select);
+
+    } catch (err) {
+        container.innerHTML = 'エラー';
     }
-  }
-
-  renderList(keyword) {
-    const list = this.shadowRoot.querySelector("#list");
-    list.innerHTML = "";
-
-    const filtered = this.data.filter(item =>
-      item.name.toLowerCase().includes(keyword.toLowerCase())
-    );
-
-    filtered.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "item";
-      div.textContent = item.name + (item.rank ? ` (${item.rank})` : '');
-      div.onclick = () => {
-        this.shadowRoot.querySelector("#zoom").value = item.zoom;
-      };
-      list.appendChild(div);
-    });
-
-    this.shadowRoot.querySelector("#zoom").value = filtered[0]?.zoom || "";
-  }
 }
-
-customElements.define("closer-select", ClosersModule);

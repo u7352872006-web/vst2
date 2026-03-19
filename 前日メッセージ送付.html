@@ -1,136 +1,83 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>前日メッセージ送付</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <meta charset="UTF-8">
+    <title>前日メッセージ送付</title>
 </head>
 <body>
 
 <h3>前日メッセージ送付🌙</h3>
 
-<!-- CSV作り方リンク -->
-<a
-  href="https://www.loom.com/share/206c56f599f84ba1aed34ff241102d75"
-  target="_blank"
-  style="font-size:8pt; display:inline-block; margin-bottom:6px;"
->
-  💡 CSVファイルの作り方
-</a>
-<br>
-<span style="font-size:8pt; color:#d32f2f;">
-  ※ 最新版のクローザーZoomリンクCSVをご用意ください！
-</span>
-<br>
-
-<input type="file" id="csvFile" accept=".csv">
-<hr>
+<label>
+    面談時間：
+    <select id="meetingTime">
+        <option value="">選択してください</option>
+        <option value="10:00">10:00</option>
+        <option value="11:30">11:30</option>
+        <option value="13:00">13:00</option>
+        <option value="14:30">14:30</option>
+        <option value="16:00">16:00</option>
+        <option value="17:30">17:30</option>
+        <option value="18:30">18:30</option>
+        <option value="19:00">19:00</option>
+        <option value="20:30">20:30</option>
+        <option value="21:00">21:00</option>
+        <option value="21:30">21:30</option>
+        <option value="22:00">22:00</option>
+    </select>
+</label>
+<br><br>
 
 <label>
-  面談時間：
-  <select id="meetingTime">
-    <option value="">選択してください</option>
-    <option value="10:00">10:00</option>
-    <option value="11:30">11:30</option>
-    <option value="13:00">13:00</option>
-    <option value="14:30">14:30</option>
-    <option value="16:00">16:00</option>
-    <option value="17:30">17:30</option>
-    <option value="18:30">18:30</option>
-    <option value="19:00">19:00</option>
-    <option value="20:30">20:30</option>
-    <option value="21:00">21:00</option>
-    <option value="21:30">21:30</option>
-    <option value="22:00">22:00</option>
-  </select>
+    担当者：
+    <span id="closer-list">読み込み中...</span>
 </label>
-<br>
-<br>
+<br><br>
 
-<label>
-  担当者：
-  <select id="staffSelect">
-    <option value="">CSVを読み込んでください</option>
-  </select>
-</label>
-<br>
-<br>
+<input type="hidden" id="zoom-url">
 
-<textarea id="output" rows="15" cols="27" style="background:#f9f9f9;"></textarea>
+<textarea id="output" rows="15" cols="30"></textarea>
 <br>
 
 <button id="copyBtn">コピー</button>
 
-<script>
-const csvFileInput = document.getElementById("csvFile");
-const meetingTimeInput = document.getElementById("meetingTime");
-const staffSelect = document.getElementById("staffSelect");
-const output = document.getElementById("output");
-const copyBtn = document.getElementById("copyBtn");
+<script type="module">
+    import { initCloserSelect } from './closer-select.js';
 
-let staffData = {};
+    const meetingTimeInput = document.getElementById("meetingTime");
+    const zoomUrlInput = document.getElementById("zoom-url");
+    const output = document.getElementById("output");
+    const copyBtn = document.getElementById("copyBtn");
 
-// テキスト生成
-function generateText() {
-  const staffName = staffSelect.value;
-  const time = meetingTimeInput.value;
+    function generateText() {
+        const rawTime = meetingTimeInput.value; // "10:00" など
+        const url = zoomUrlInput.value; 
+        
+        const selectEl = document.querySelector('#closer-list select');
+        if (!selectEl || !selectEl.value || !rawTime) {
+            output.value = "";
+            return;
+        }
 
-  if (!staffName || !time) {
-    output.value = "";
-    return;
-  }
+        // 時間表記の変換ロジック
+        const timeDisplay = rawTime.replace(':00', '時').replace(':30', '時半');
 
-  output.value =
-`お疲れ様です！
-明日の${time}からは予定通りよろしくお願いします😊
+        output.value = `お疲れ様です！
+明日の${timeDisplay}からは予定通りよろしくお願いします😊
 
 時間になったらご参加ください。
 
-${staffData[staffName]}`;
-}
-
-// CSV読み込み
-csvFileInput.addEventListener("change", e => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  staffSelect.innerHTML = '<option value="">担当者を選択</option>';
-  staffData = {};
-
-  Papa.parse(file, {
-    header: false,
-    skipEmptyLines: true,
-    complete: results => {
-      results.data.forEach(row => {
-        const name = row[0]?.trim();
-        const url = row[1]?.trim();
-        if (name && url) {
-          staffData[name] = url;
-          staffSelect.insertAdjacentHTML(
-            "beforeend",
-            `<option value="${name}">${name}</option>`
-          );
-        }
-      });
+${url}`;
     }
-  });
-});
 
-// 担当者変更
-staffSelect.addEventListener("change", generateText);
+    initCloserSelect('closer-list', 'zoom-url', generateText);
+    meetingTimeInput.addEventListener("change", generateText);
 
-// 面談時間変更
-meetingTimeInput.addEventListener("change", generateText);
-
-// コピー
-copyBtn.addEventListener("click", () => {
-  if (!output.value.trim()) return;
-  output.select();
-  document.execCommand("copy");
-});
+    copyBtn.addEventListener("click", () => {
+        output.select();
+        document.execCommand("copy");
+    });
 </script>
 
 </body>
 </html>
-
-
