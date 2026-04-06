@@ -77,6 +77,7 @@ https://utage-system.com/event/ZOLI3HlD8aMT/applicant" style="background-color:#
         <textarea id="resMsg" rows="35" cols="30"></textarea>
         <button id="copyMsg">コピー</button>
         <br>
+        <br>
       </li>
       <li>
         <span style="color:#B22222; font-weight:bold; font-size:18px;">動画送付</span><br>
@@ -91,7 +92,7 @@ https://utage-system.com/event/ZOLI3HlD8aMT/applicant" style="background-color:#
         <span style="color:gray;">・担当クローザーをメンション</span><br>
         <span style="color:gray;">・画面スクショを共有</span><br><br>
         <span style="color:gray;"></span>スレッド名：<br>
-        <textarea id="chatQuestion" rows="5" cols="30"></textarea>
+        <textarea id="chatQuestion" rows="2" cols="30"></textarea>
         <button id="chatCopyBtn">コピー</button>
       　<br><br>
       　<br><br>
@@ -120,7 +121,7 @@ https://utage-system.com/event/ZOLI3HlD8aMT/applicant" style="background-color:#
       const zoom = document.getElementById('zoomUrl').value || "";
 
       if (lName) {
-        chatQuestion.value = `【${lName}＿アポ振りスレッド】`;
+        chatQuestion.value = `【${lName}_アポ振りスレッド】`;
         chatQuestion.style.color = "#000";
       } else {
         chatQuestion.value = "【入力待ち】LINE名を入力してください";
