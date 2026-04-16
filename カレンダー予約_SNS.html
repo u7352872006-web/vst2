@@ -38,16 +38,12 @@
 https://utage-system.com/event/ZOLI3HlD8aMT/applicant" style="background-color:#e8f5e9;"></textarea>
   <button id="copyInfo">コピー</button>
 
-  <p>2. LINE名</p>
-  <textarea id="lineName" rows="2" cols="25" placeholder="LINE名を入力" style="background-color:#fff9c4;"></textarea>
-  <button id="copyLine">コピー</button>
-
   <section style="font-size:12px; line-height:1.6;">
     <p style="font-weight:bold;">各種入力</p>
     <ul>
       <li>
-        <span style="color:blue; font-weight:bold; font-size:18px;">クローザー日程</span><br>
-        <span style="color:gray;">→ LINE名で入力してあげたほうが親切かも</span><br>
+        <span style="color:blue; font-weight:bold; font-size:18px;">クローザー日程に記載</span><br>
+        <span style="color:gray;">※SNSは1アポ2枠消化</span><br>
         <span style="color:gray;">担当クローザー：</span><br>
         <div id="closerContainer"></div>
         <input type="hidden" id="zoomUrl">
@@ -68,13 +64,12 @@ https://utage-system.com/event/ZOLI3HlD8aMT/applicant" style="background-color:#
         <br>
       </li>
       <li>
-        <span style="color:#B22222; font-weight:bold; font-size:18px;">メモ欄</span><br>
+        <span style="color:#B22222; font-weight:bold; font-size:18px;">メモ欄を記載</span><br>
         <span style="font-weight:bold; background-color:#fff9c4; padding:2px 4px;">申込情報を貼る</span><br>
         <br>
       </li>
       <li>
-        <span style="color:#B22222; font-weight:bold; font-size:18px;">【正式通知】送付</span><br>
-        <span style="color:gray;">※動画を送らない企画の場合<br>「この後 〇〇さんに向けた<br>メッセージ動画をお送りするので」の部分を消す</span><br>
+        <span style="color:#B22222; font-weight:bold; font-size:18px;">通知文送付</span><br>
         <textarea id="resMsg" rows="35" cols="30"></textarea>
         <button id="copyMsg">コピー</button>
         <br>
@@ -83,21 +78,16 @@ https://utage-system.com/event/ZOLI3HlD8aMT/applicant" style="background-color:#
       <li>
         <span style="color:#B22222; font-weight:bold; font-size:18px;">動画送付</span><br>
         <span style="color:gray;">企画によって送る動画が違うので注意！</span><br>
-        <span style="color:gray;">※動画を送らない企画もある</span><br>
+        <span style="color:gray;">※千国さん、田中から指示があったアクションを送信</span><br>
         <br>
       </li>
       <li>
-        <span style="color:#B22222; font-weight:bold; font-size:18px;">担当クローザに報告</span><br>
-        <span style="color:gray;">Slackチャンネル「snsセールス精鋭部隊」で</span><br>
-        <span style="color:gray;">・スレッドを立てる</span><br>
+        <span style="color:#B22222; font-weight:bold; font-size:18px;">担当クローザにアポ振り報告</span><br>
+        <span style="color:gray;">Slack「sns個別相談通知」の該当スレッドで</span><br>
         <span style="color:gray;">・担当クローザーをメンション</span><br>
-        <span style="color:gray;">・画面スクショを共有</span><br><br>
-        <span style="color:gray;"></span>スレッド名：<br>
-        <textarea id="chatQuestion" rows="2" cols="30"></textarea>
-        <button id="chatCopyBtn">コピー</button>
-      　<br><br>
-      　<br><br>
-      　<br><br>
+        <br><br>
+        <br><br>
+        <br><br>
       </li>
   </ul>
 </section>
@@ -112,24 +102,13 @@ https://utage-system.com/event/ZOLI3HlD8aMT/applicant" style="background-color:#
 
     function run() {
       const rawText = info.value;
-      const lName = lineName.value.trim();
 
       const extractedUserName = (rawText.match(/■お名前：\s*([^\n\r]+)/) || ["",""])[1].trim();
-      let extractedEventName = (rawText.match(/■イベント名：\s*([^\n\r]+)/) || ["",""])[1].trim();
-      if (extractedEventName) extractedEventName = extractedEventName.split(/[（_]/)[0].trim();
       const eventDate = (rawText.match(/■日程：\s*([^\n\r]+)/) || ["",""])[1].trim();
 
       const zoom = document.getElementById('zoomUrl').value || "";
 
-      if (lName) {
-        chatQuestion.value = `【${lName}_アポ振りスレッド】`;
-        chatQuestion.style.color = "#000";
-      } else {
-        chatQuestion.value = "【入力待ち】LINE名を入力してください";
-        chatQuestion.style.color = "#999";
-      }
-
-      if (!extractedUserName || !extractedEventName || !eventDate || !lName || !zoom) {
+      if (!extractedUserName || !eventDate || !zoom) {
         resMsg.value = "";
         resMsg.style.color = "#999";
         return;
@@ -137,10 +116,13 @@ https://utage-system.com/event/ZOLI3HlD8aMT/applicant" style="background-color:#
 
       resMsg.style.color = "#000";
       resMsg.value = `【正式通知】
+
 改めまして
-〈${extractedEventName}〉にお申し込みいただきありがとうございました。
+お申し込みいただきありがとうございました。
+
 下記日時とURLにて
 実施できればと思いますので
+
 どうぞよろしくお願いいたします。
 
 【開催日時】
@@ -149,28 +131,21 @@ ${eventDate}
 ※実際の所要時間は2時間程度です
 
 【参加URL】
-Zoomリンク
 ${zoom}
+
 
 【準備する物、お願い事項】
 ・ご自宅など集中できる環境
 ・聞きたいことの整理
 ・個別開催につき、カメラオンでのご参加
 
-この後
-${extractedUserName}さんに向けた
-メッセージ動画を
-お送りするので
-ご確認くださいませ。
 当日はよろしくお願いいたします。`;
     }
 
     info.oninput = run;
-    lineName.oninput = run;
 
     document.getElementById('clearBtn').onclick = () => {
       info.value = "";
-      lineName.value = "";
       document.getElementById('zoomUrl').value = "";
 
       const cSelect = document.querySelector('#closerContainer select');
@@ -182,15 +157,12 @@ ${extractedUserName}さんに向けた
     };
 
     const copy = (el) => {
-      if (el.value.includes("【入力待ち】")) return;
       el.select();
       document.execCommand('copy');
     };
 
     document.getElementById('copyInfo').onclick = () => copy(info);
-    document.getElementById('copyLine').onclick = () => copy(lineName);
     document.getElementById('copyMsg').onclick = () => copy(resMsg);
-    document.getElementById('chatCopyBtn').onclick = () => copy(chatQuestion);
   </script>
 </body>
 </html>
