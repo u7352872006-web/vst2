@@ -10,6 +10,7 @@ export function initEntrySelect(targetId, onChangeCallback) {
         { label: "AI動画編集 個別サポート @608", value: "AI動画編集＠608vwghp_" },
         { label: "個別サポート（受講生用）@758", value: "動画編集＠758mfkde_" },
         { label: "スマホ副業個別サポート@108", value: "動画編集＠108kmcmr_" },
+        { label: "カズマル@オンライン個別サポート用_@785", value: "動画編集＠785aouuc_" },
         { label: "その他", value: "" }
     ];
 
