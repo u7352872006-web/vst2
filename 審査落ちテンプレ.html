@@ -3,140 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <title>審査落ちテンプレ</title>
+<style>
+  /* 共通の注釈スタイル */
+  .note {
+    font-size: 12px;
+    display: block;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+  .note-red { color: red; }
+  .note-gray { color: #999; }
+  
+  /* レイアウト調整 */
+  a { display: inline-block; margin-bottom: 8px; }
+  ul a { margin-bottom: 0; }
+  hr { margin: 20px 0; }
+  textarea { display: block; margin-bottom: 8px; background-color: #f9f9f9; } /* 編集不可と分かりやすくするため背景を少しグレーに */
+</style>
 </head>
 <body>
 
 <h3>審査落ちテンプレ</h3>
-<button id="clearBtn">初期化</button>
-<br><br>
-
-<p>目次</p>
-<ul>
-  <li><a href="#sec1">① 審査落ち（面談済み）</a></li>
-  <li><a href="#sec2">② ★ 複数申込み</a></li>
-  <li><a href="#sec3">③ 審査落ち（債務整理・カードブラック・生活保護）</a></li>
-  <li><a href="#sec4">④ 審査落ち（65歳以上）</a></li>
-  <li><a href="#sec5">⑤ 審査落ち（中高生）</a></li>
-  <li><a href="#sec6">⑥ 審査落ち（聴覚障害・耳が聞こえない）</a></li>
-  <li><a href="#sec7">⑦ 審査落ち（ＳＮＳ経由）</a></li>
-</ul>
 <br>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">テンプレはこれが絶対というわけではないので</span>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">内容を適宜変更してお使いください！</span>
+
+<p>① 審査落ちメッセージ</p>
+<a 
+  href="https://docs.google.com/presentation/d/18-Ie0TpxFt-p1nS63S7JjxYfniQXysn4p_yp5qnLbl4/edit?slide=id.g38ed7ac6d54_0_105#slide=id.g38ed7ac6d54_0_105" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>・広告経由</a>
 <br>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">各テキストボックスは編集できます</span>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">上の「初期化」ボタンで初期化できます</span>
-<br>
-<span style="color: red; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">カレンダー予約の場合、シナリオ解除要</span>
-<hr>
-
-<a id="sec1"></a>
-<p>① 審査落ち（面談済み）</p>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">直近で面談した人</span>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">アップセルが見込めない</span>
-<textarea id="userName1" rows="2" cols="30" placeholder="LINE名を入力" style="background-color: #ffffcc;"></textarea>
-<br>
-<textarea id="rejectMsg" rows="25" cols="30"></textarea>
-<button id="copyReject">コピー</button>
-
-<br><br><hr>
-
-<a id="sec2"></a>
-<p>② 複数申込み</p>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">例）＠527で申し込みがあったけど<br>４日後に＠899で面談予定！みたいな人</span>
-<br>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">貴重なクローザー枠なので、<br>新たに申し込まれた方（企画）を<br>既存の面談予定に寄せる</span>
-<br>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">面談する方のアカウントで<br>担当クローザー宛に<br>UTAGEメモを残しておくと親切！</span>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">「○○（新たに申し込まれた企画）」<br>の内容も当日話してください！と</span>
-
-<textarea id="userName2" rows="2" cols="30" placeholder="LINE名を入力" style="background-color: #ffffcc;"></textarea><br>
-<textarea id="originalEventName" rows="3" cols="30" placeholder="元々申し込んでいた企画名を入力（例：裏ワザ共有会、個別サポート）" style="background-color: #ffffcc;"></textarea><br>
-<textarea id="eventDate" rows="3" cols="30" placeholder="元々申し込んでいた企画の日時を入力（例：4/1(水) 19:00～20:00）" style="background-color: #ffffcc;"></textarea><br>
-<textarea id="newEventName" rows="3" cols="30" placeholder="新たに申し込んだ企画名を入力（例：時給5000円ロードマップ実現会）" style="background-color: #ffffcc;"></textarea>
-<br>
-<textarea id="duplicateMsg" rows="25" cols="30"></textarea>
-<button id="copyDuplicate">コピー</button>
-
-<br><br><hr>
-
-<a id="sec3"></a>
-<p>③ 審査落ち（債務整理・カードブラック・生活保護）</p>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">借金まみれなど、やばい人汎用</span>
-<textarea id="creditMsg" rows="25" cols="30"></textarea>
-<button id="copyCredit">コピー</button>
-
-<br><br><hr>
-
-<a id="sec4"></a>
-<p>④ 審査落ち（65歳以上）</p>
-<textarea id="seniorMsg" rows="25" cols="30"></textarea>
-<button id="copySenior">コピー</button>
-
-<br><br><hr>
-
-<a id="sec5"></a>
-<p>⑤ 審査落ち（中高生）</p>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">大学生は相談！</span>
-<textarea id="studentMsg" rows="25" cols="30"></textarea>
-<button id="copyStudent">コピー</button>
-
-<br><br><hr>
-
-<a id="sec6"></a>
-<p>⑥ 審査落ち（聴覚障害・耳が聞こえない）</p>
-<span style="color: #999; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px;">可哀そうだけど、ごめんなさい</span>
-<textarea id="nanchoMsg" rows="25" cols="30"></textarea>
-<button id="copyNancho">コピー</button>
-
-<br><br><hr>
-
-<a id="sec7"></a>
-<p>⑦ 審査落ち（SNS）</p>
 
 <a 
   href="https://docs.google.com/presentation/d/18-Ie0TpxFt-p1nS63S7JjxYfniQXysn4p_yp5qnLbl4/edit?slide=id.g3e98d912797_0_5#slide=id.g3e98d912797_0_5" 
   target="_blank" 
-  rel="noopener noreferrer"  
->SNS経由での審査落ちテンプレ ↗（マニュアル 6/7更新）</a>
-<br><br>
-<br><br>
+  rel="noopener noreferrer"
+>・ＳＮＳ経由 (6/7更新)</a>
+<br>
+<br>
+
+<p>② 複数申し込み</p>
+<a 
+  href="https://docs.google.com/presentation/d/18-Ie0TpxFt-p1nS63S7JjxYfniQXysn4p_yp5qnLbl4/edit?slide=id.g38ed7ac6d54_0_94#slide=id.g38ed7ac6d54_0_94" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>・複数申し込み</a>
+<br>
+<br>
+
+<p>③ お断りメッセージ</p>
+<span class="note note-gray">これが絶対というわけではないので、</span>
+<span class="note note-gray">内容を適宜変更してお使いください</span>
+
+<ul>
+  <li><a href="#sec3">債務整理・カードブラック・生活保護</a></li>
+  <li><a href="#sec4">65歳以上</a></li>
+  <li><a href="#sec5">中高生</a></li>
+  <li><a href="#sec6">聴覚障害・耳が聞こえない</a></li>
+</ul>
+
+<hr>
+
+<p id="sec3">債務整理・カードブラック・生活保護</p>
+<span class="note note-gray">借金まみれなど、やばい人汎用</span>
+<textarea id="creditMsg" rows="25" cols="30" readonly></textarea>
+<button id="copyCredit">コピー</button>
+
+<hr>
+
+<p id="sec4">65歳以上</p>
+<textarea id="seniorMsg" rows="25" cols="30" readonly></textarea>
+<button id="copySenior">コピー</button>
+
+<hr>
+
+<p id="sec5">中高生</p>
+<span class="note note-gray">大学生は相談！</span>
+<textarea id="studentMsg" rows="25" cols="30" readonly></textarea>
+<button id="copyStudent">コピー</button>
+
+<hr>
+
+<p id="sec6">聴覚障害・耳が聞こえない</p>
+<span class="note note-gray">可哀そうだけど、ごめんなさい</span>
+<textarea id="nanchoMsg" rows="25" cols="30" readonly></textarea>
+<button id="copyNancho">コピー</button>
+
+<br>
+<br>
+<br>
+
 
 <script>
-// (以下、前回のスクリプトと同じ内容です)
-const inputs = [userName1, userName2, originalEventName, eventDate, newEventName, userName7];
+  // テキストエリアの要素を取得
+  const creditMsg = document.getElementById('creditMsg');
+  const seniorMsg = document.getElementById('seniorMsg');
+  const studentMsg = document.getElementById('studentMsg');
+  const nanchoMsg = document.getElementById('nanchoMsg');
 
-function run() {
-  const u1 = userName1.value.trim();
-  const u2 = userName2.value.trim();
-  const oE = originalEventName.value.trim();
-  const eD = eventDate.value.trim();
-  const nE = newEventName.value.trim();
-  const u7 = userName7.value.trim();
-
-  rejectMsg.value = u1 ? `お申込みありがとうございます！
-すみません💦
-${u1}さんは過去に弊社の企画に参加されたことがあるようです。
-
-個別対応のためのリソースが逼迫しており、
-
-可能な限り非受講生の方や、
-これまで企画に参加していない方を
-優先的に対応したいと思っております。。
-申し訳ありませんが、
-今回の企画はお見送りとさせてください🙇
-
-何卒宜しくお願いいたします！` : "";
-
-  duplicateMsg.value = (u2 && oE && eD && nE) ? `お申込みありがとうございます！
-
-${u2}さんは既に
-${oE}に
-${eD}で
-申込み済ですので、
-${nE}についても
-その時に合わせてお話ししますね！` : "";
-
+  // 初期メッセージの設定
   creditMsg.value = `お申し込みありがとうございます！
 
 せっかくお申し込みいただいたのですが、
@@ -168,41 +133,27 @@ ${nE}についても
 
 何卒ご理解のほど、よろしくお願いいたします。`;
 
-  nanchoMsg.value = `〇〇さん
-このたびは「[企画名]」へのお申し込み、誠にありがとうございました！
+  nanchoMsg.value = `お申し込みありがとうございます！
 
-さっそくお申し込み内容を確認させていただきました。
-本企画は、お一人おひとりにしっかりお時間をお取りするため、ご案内できる枠に限りがあり、お申し込み内容をもとに選考のうえ、ご案内しております。
+せっかく興味を持っていただいたのですが、
+今回の企画は、Zoomでの対面進行が必須であり、その特性上、どうしても音声によるリアルタイムなやり取りが前提となるため、今回はお力添えをすることが叶いません。
 
-慎重に検討させていただいた結果、誠に恐縮ですが、今回は〇〇さんへのご案内を見送らせていただくこととなりました。
-せっかくお申し込みいただいたのに、ご期待に沿えず申し訳ございません🙇
+そのため大変恐縮ですが、今回のお申し込みはお見送りとさせてください🙇
 
-今回お話しする予定だった内容は、下記の資料にすべてまとめております。
-個別相談に代えて、ぜひこちらをご活用いただけますと幸いです😊
+ご希望にお応えできず大変心苦しいのですが、何卒ご理解のほど、よろしくお願いいたします。`; // 空欄
 
-[特典URL]
+  // コピー処理の共通関数
+  const copy = el => { 
+    if (!el.value.trim()) return; 
+    el.select(); 
+    document.execCommand('copy'); 
+  };
 
-引き続きどうぞよろしくお願いいたします。
-` : "";
-}
-
-run();
-inputs.forEach(el => el.oninput = run);
-
-clearBtn.onclick = () => {
-  inputs.forEach(el => el.value = "");
-  run();
-};
-
-const copy = el => { if (!el.value.trim()) return; el.select(); document.execCommand('copy'); };
-
-copyReject.onclick = () => copy(rejectMsg);
-copyDuplicate.onclick = () => copy(duplicateMsg);
-copyCredit.onclick = () => copy(creditMsg);
-copySenior.onclick = () => copy(seniorMsg);
-copyStudent.onclick = () => copy(studentMsg);
-copyNancho.onclick = () => copy(nanchoMsg);
-copySnsReject.onclick = () => copy(snsRejectMsg);
+  // 各コピーボタンのイベント設定
+  document.getElementById('copyCredit').onclick = () => copy(creditMsg);
+  document.getElementById('copySenior').onclick = () => copy(seniorMsg);
+  document.getElementById('copyStudent').onclick = () => copy(studentMsg);
+  document.getElementById('copyNancho').onclick = () => copy(nanchoMsg);
 </script>
 
 </body>
