@@ -5,7 +5,7 @@ export function initEntrySelect(targetId, onChangeCallback) {
         { label: "（Meta2）@851", value: "動画編集＠851nqhyd_" },
         { label: "（Meta3）@899", value: "動画編集＠899zwdaz_" },
         { label: "カズマル｜日程調整用", value: "カズマル｜日程調整用_" },
-        { label: "貯金3億27歳♂日程調整用@664dijnl", value: "貯金3億27歳♂日程調整用_" },
+        { label: "貯金3億27歳♂日程調整用@664dijnl", value: "貯金3億27歳♂日程調整用@664dijnl_" },
         { label: "（プレゼント企画経由）@527djnmg", value: "動画編集＠527djnmg_" },
         { label: "（YT）@521", value: "動画編集＠521obscj_" },
         { label: "（TikTok）@004", value: "動画編集＠004uieyi_" },
