@@ -91,11 +91,17 @@
 <p style="color: Gray; font-size: 15px;">─── ✦ 4通目 ✦ ───</p>
 
 <p style="color: Black; font-size: 12px;">◼︎テンプレ文</p>
-<p style="color: Red; font-size: 12px;">動画URL（5/26更新）</p>
+<p style="color: Red; font-size: 12px;">動画URL（7/2更新）</p>
 <textarea id="out41" rows="5" cols="27"></textarea>
 <button onclick="copyText('out41')">コピー</button>
 <br><br>
 
+<p style="color: Red; font-size: 12px;">『ツール導線経由』のラベルがついている場合は以下を送付↓</p>
+<p style="color: Red; font-size: 12px;">動画URL（7/2更新）</p>
+<textarea id="out41_2" rows="5" cols="27"></textarea>
+<button onclick="copyText('out41_2')">コピー</button>
+<br><br>
+  
 <p style="color: Black; font-size: 12px;">◼︎相手から反応がない場合</p>
 <textarea id="out42" rows="5" cols="27"></textarea>
 <button onclick="copyText('out42')">コピー</button>
@@ -114,7 +120,7 @@ const textIds = [
   "out11","out12","out13","out14",
   "out21","out22","out23",
   "out31","out32",
-  "out41","out42",
+  "out41","out41_2","out42",
   "out51"
 ];
 
@@ -159,10 +165,17 @@ https://forms.gle/i2XPWLVQE44iYc7b8`;
   document.getElementById("out32").value =
 `〜〜！いいですね！
 それなら、スマホde動画編集はちょうどよかったです！`;
+  
   document.getElementById("out41").value =
-`スマホ動画編集についての動画送るんで
+`僕が副業で上手くいったやり方を動画にしたので
 ぜひ見ておいてください！
 https://youtu.be/N-ANzlk0Ff4?openExternalBrowser=1`;
+
+  document.getElementById("out41_2").value =
+`僕が副業で上手くいったやり方を動画にしたので
+ぜひ見ておいてください！
+https://youtu.be/f7NA3wcmPL4`;
+  
   document.getElementById("out42").value =
 `見たら感想欲しいんですけど、どうです？`;
   document.getElementById("out51").value =
