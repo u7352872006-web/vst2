@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>日程提示</title>
+<style>
+body {
+  font-family: sans-serif;
+  max-width: 450px;
+  margin: 20px auto;
+  padding: 0 10px;
+}
+input[type="date"] {
+  color: #000;
+}
+input[type="date"]:not(:valid) {
+  color: #bbb;
+}
+.line-name-area {
+  margin-bottom: 15px;
+  background: #fff9c4;
+  padding: 10px;
+  border-radius: 5px;
+}
+.line-name-area input {
+  padding: 5px;
+  font-size: 14px;
+  width: 180px;
+}
+.line-name-area button {
+  padding: 5px 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+#inputs label {
+  display: block;
+  margin-bottom: 8px;
+}
+.badge-4hour {
+  color: #ff3333;
+  font-weight: bold;
+  font-size: 12px;
+  margin-left: 8px;
+}
+.action-btn {
+  padding: 6px 15px;
+  cursor: pointer;
+}
+
+/* --- おしゃれにしたタイトルのスタイル --- */
+.box-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  padding-left: 8px;
+  display: inline-block;
+}
+
+/* スタンプ受信用（グリーン系） */
+.title-stamp {
+  color: #2e7d32;
+  border-left: 4px solid #4caf50;
+}
+
+/* 再調整用（オレンジ系） */
+.title-re-adjust {
+  color: #e65100;
+  border-left: 4px solid #ff9800;
+}
+</style>
+</head>
+<body>
+
+<h3>日程提示📅</h3>
+
+<!-- LINE名入力エリア -->
+<div class="line-name-area">
+  <label for="lineName">LINE名: </label>
+  <input type="text" id="lineName" placeholder="お客さんの名前">
+  <button type="button" id="deleteLineNameBtn">削除</button>
+</div>
+
+<form id="scheduleForm">
+  <div id="inputs"></div>
+  <br>
+  <button type="button" id="generateBtn" class="action-btn">生成</button>
+</form>
+
+<br>
+<!-- 1つ目のテキストボックス（スタンプ受信用）とコピーボタン -->
+<div class="box-title title-stamp">スタンプ受信用</div>
+<br>
+<textarea id="output" rows="25" cols="27" placeholder="生成ボタンを押してください"></textarea>
+<button type="button" id="copyBtn" class="action-btn" style="margin-top: 5px; margin-bottom: 20px;">コピー</button>
+<br>
+<br>
+<!-- 2つ目のテキストボックス（再調整用）とコピーボタン -->
+<div class="box-title title-re-adjust">再調整用</div>
+<br>
+<textarea id="output2" rows="25" cols="27" placeholder="生成ボタンを押してください"></textarea>
+<button type="button" id="copyBtn2" class="action-btn" style="margin-top: 5px;">コピー</button>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<button type="button" id="resetBtn" class="action-btn">すべてを初期化する</button>
+
+<script>
+const slots = ["①","②","③","④","⑤","⑥"];
+
+// ①〜⑤用の時間（2時間幅）
+const timeOptions1to5 = [
+  "10:00～12:00", "11:30～13:30", "13:00～15:00", "14:30～16:30",
+  "16:00～18:00", "17:30～19:30", "18:30～20:30", "19:00～21:00",
+  "20:30～22:30", "21:00～23:00", "21:30～23:30", "22:00～24:00"
+];
+
+// ⑥用の時間（4時間幅）
+const timeOptions6 = [
+  "10:00～14:00", "11:30～15:30", "13:00～17:00", "14:30～18:30",
+  "16:00～20:00", "17:30～21:30", "19:00～23:00", "20:30～00:30"
+];
+
+const inputsDiv = document.getElementById("inputs");
+const lineNameInput = document.getElementById("lineName");
+const outputTextarea = document.getElementById("output");
+const outputTextarea2 = document.getElementById("output2"); // 2つ目のテキストボックス
+
+// ①〜⑥の入力欄をループ生成
+slots.forEach((slotName, i) => {
+    const label = document.createElement("label");
+    label.textContent = slotName + " ";
+
+    const dateInput = document.createElement("input");
+    dateInput.type = "date";
+    dateInput.id = `date${i}`;
+    dateInput.required = true;
+
+    const timeSelect = document.createElement("select");
+    timeSelect.id = `time${i}`;
+
+    const currentOptions = (slotName === "⑥") ? timeOptions6 : timeOptions1to5;
+    currentOptions.forEach(t => {
+        const opt = new Option(t, t);
+        timeSelect.appendChild(opt);
+    });
+
+    label.appendChild(dateInput);
+    label.appendChild(timeSelect);
+
+    if (slotName === "⑥") {
+        const badge = document.createElement("span");
+        badge.className = "badge-4hour";
+        badge.textContent = "※4時間枠";
+        label.appendChild(badge);
+    }
+
+    inputsDiv.appendChild(label);
+});
+
+// リセット用共通関数
+const clearFields = (clearAll) => {
+    lineNameInput.value = "";
+    outputTextarea.value = "";
+    outputTextarea2.value = ""; // 2つ目もクリア
+    if (clearAll) {
+        slots.forEach((_, i) => {
+            document.getElementById(`date${i}`).value = "";
+            document.getElementById(`time${i}`).selectedIndex = 0;
+        });
+    }
+};
+
+// LINE名「削除」ボタン
+document.getElementById("deleteLineNameBtn").addEventListener("click", () => clearFields(false));
+
+// 「初期化」ボタン
+document.getElementById("resetBtn").addEventListener("click", () => clearFields(true));
+
+// 日程生成
+document.getElementById("generateBtn").addEventListener("click", () => {
+    const week = ["日","月","火","水","木","金","土"];
+    const lineName = lineNameInput.value.trim();
+
+    if (!lineName) {
+        alert("LINE名を入力してください");
+        lineNameInput.focus();
+        return;
+    }
+
+    let items1to5 = [];
+    let item6 = null;
+    let hasEmptyDate = false;
+
+    // 入力チェック
+    for (let i = 0; i < slots.length; i++) {
+        const dateInput = document.getElementById(`date${i}`);
+        const dateVal = dateInput.value;
+        const timeVal = document.getElementById(`time${i}`).value;
+
+        if (!dateVal) {
+            hasEmptyDate = true;
+            dateInput.focus();
+            break;
+        }
+
+        const itemData = {
+            slotName: slots[i],
+            dateObj: new Date(dateVal),
+            timeVal
+        };
+
+        if (slots[i] === "⑥") {
+            item6 = itemData;
+        } else {
+            items1to5.push(itemData);
+        }
+    }
+
+    if (hasEmptyDate) {
+        alert("①から⑥までのすべての日付を選択してください");
+        return;
+    }
+
+    // 時間を分に変換するヘルパー
+    const toMinutes = t => {
+        const [h, m] = t.split("～")[0].split(":").map(Number);
+        return h * 60 + m;
+    };
+
+    // ①〜⑤のみ日付順・時間順にソート
+    items1to5.sort((a, b) => (a.dateObj - b.dateObj) || (toMinutes(a.timeVal) - toMinutes(b.timeVal)));
+
+    // ソートした1to5の後ろに⑥を結合して固定
+    const finalItems = [...items1to5, item6];
+
+    // 日程候補テキスト組み立て (1つ目・2つ目の共通部分)
+    const scheduleText = finalItems.map((item, idx) => {
+        const d = item.dateObj;
+        const formattedDate = `${slots[idx]}${d.getMonth() + 1}/${d.getDate()} (${week[d.getDay()]}) ${item.timeVal}`;
+        return item.slotName === "⑥" 
+            ? `${formattedDate} ※この間で２時間ほど確保してください` 
+            : formattedDate;
+    }).join("\n");
+
+    // 1つ目のテキストボックス用メッセージ生成 (スタンプ受信用)
+    const generatedMessage1 = 
+        `${lineName}さんスタンプありがとうございます！\n\n` +
+        `${lineName}さん専用のサポート時間を確保しました！\n` +
+        `下記からお選びいただけますか？\n\n` +
+        `${scheduleText}\n\n` +
+        `※参加希望の方が多いため、先着順になります\n\n` +
+        `上記でご都合の良いお日にちを教えてください！☺️\n\n` +
+        `もし予定が合わない場合は再度調整しますね！`;
+
+    // 2つ目のテキストボックス用メッセージ生成 (再調整用)
+    const generatedMessage2 = 
+        `${lineName}さん！再度日程調整しますね！\n` +
+        `※参加希望の方が多いため、先着順になります\n\n` +
+        `${scheduleText}\n\n` +
+        `上記でご都合の良いお日にちを教えてください！☺️\n\n` +
+        `もし予定が合わない場合は再度調整しますね！`;
+
+    // それぞれのテキストボックスに設定
+    outputTextarea.value = generatedMessage1;
+    outputTextarea2.value = generatedMessage2;
+});
+
+// 1つ目のコピー処理
+document.getElementById("copyBtn").addEventListener("click", async () => {
+    const text = outputTextarea.value;
+    if (!text) {
+        alert("まず日付と時間帯を入力し、生成ボタンを押してください");
+        return;
+    }
+    await navigator.clipboard.writeText(text);
+});
+
+// 2つ目のコピー処理
+document.getElementById("copyBtn2").addEventListener("click", async () => {
+    const text = outputTextarea2.value;
+    if (!text) {
+        alert("まず日付と時間帯を入力し、生成ボタンを押してください");
+        return;
+    }
+    await navigator.clipboard.writeText(text);
+});
+</script>
+</body>
+</html>
