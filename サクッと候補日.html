@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>サクッと候補日</title>
+<style>
+body {
+  font-family: sans-serif;
+  max-width: 450px;
+  margin: 20px auto;
+  padding: 0 10px;
+  color: #333;
+}
+input[type="date"] {
+  color: #000;
+}
+input[type="date"]:not(:valid) {
+  color: #bbb;
+}
+.inputs-container label {
+  display: block;
+  margin-bottom: 8px;
+}
+.action-btn {
+  padding: 6px 15px;
+  cursor: pointer;
+}
+
+/* メインタイトル（h3） */
+h3 {
+  font-size: 20px;
+  border-left: 5px solid #333;
+  padding-left: 10px;
+  margin-bottom: 15px;
+}
+
+/* セクションタイトル（h4）の共通スタイル */
+h4 {
+  font-size: 16px;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  padding-left: 8px;
+}
+
+/* 広告用（ピンク系） */
+.section-ad h4 {
+  border-left: 4px solid #e91e63;
+  color: #c2185b;
+}
+.section-ad .box-title {
+  border-left: 4px solid #e91e63;
+}
+.section-ad .action-btn {
+  background: #e91e63;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+.section-ad .action-btn:hover {
+  background: #d81b60;
+}
+
+/* SNS用（ブルー系） */
+.section-sns h4 {
+  border-left: 4px solid #2196f3;
+  color: #1976d2;
+}
+.section-sns .box-title {
+  border-left: 4px solid #2196f3;
+}
+.section-sns .action-btn {
+  background: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+.section-sns .action-btn:hover {
+  background: #1e88e5;
+}
+
+/* 使い方説明のスタイル（すっきりしたプレーンな見た目に変更） */
+.usage-guide {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.usage-guide ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.usage-guide li {
+  margin-bottom: 3px;
+}
+
+/* 出力結果タイトルのスタイル */
+.box-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  padding-left: 8px;
+  display: inline-block;
+  color: #333;
+}
+
+/* セクションの区切り線 */
+.section-divider {
+  margin: 30px 0;
+  border: none;
+  border-top: 2px dashed #ddd;
+}
+
+/* リセットボタン */
+.reset-btn {
+  background: #777;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+.reset-btn:hover {
+  background: #555;
+}
+</style>
+</head>
+<body>
+
+<h3>サクッと候補日</h3>
+
+<!-- 使い方説明エリア -->
+<div class="usage-guide">
+  <ul>
+    <li>サクッと日程候補を作成したいときに</li>
+    <li>1件から作成OK（すべて埋めなくてOK）</li>
+    <li>入力順がバラバラでも自動で並び替え</li>
+  </ul>
+</div>
+
+<!-- ================= 広告用２ｈ枠セクション ================= -->
+<div class="section-ad">
+  <h4>広告 (2時間枠)</h4>
+  <form id="scheduleForm2h">
+    <div id="inputs2h" class="inputs-container"></div>
+    <br>
+    <button type="button" id="generateBtn2h" class="action-btn">生成</button>
+  </form>
+
+  <br>
+  <div class="box-title">出力結果（2h枠）</div>
+  <br>
+  <textarea id="output2h" rows="12" cols="27" placeholder="生成ボタンを押してください"></textarea>
+  <button type="button" id="copyBtn2h" class="action-btn" style="margin-top: 5px; margin-bottom: 20px;">コピー</button>
+</div>
+
+<hr class="section-divider">
+
+<!-- ================= SNS用３ｈ枠セクション ================= -->
+<div class="section-sns">
+  <h4>SNS (3時間枠)</h4>
+  <form id="scheduleForm3h">
+    <div id="inputs3h" class="inputs-container"></div>
+    <br>
+    <button type="button" id="generateBtn3h" class="action-btn">生成</button>
+  </form>
+
+  <br>
+  <div class="box-title">出力結果（3h枠）</div>
+  <br>
+  <textarea id="output3h" rows="12" cols="27" placeholder="生成ボタンを押してください"></textarea>
+  <button type="button" id="copyBtn3h" class="action-btn" style="margin-top: 5px; margin-bottom: 20px;">コピー</button>
+</div>
+
+<br>
+<button type="button" id="resetBtn" class="action-btn reset-btn">すべてを初期化する</button>
+
+<script>
+// ①〜⑩までのスロットを定義
+const slots = ["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
+
+// 2時間枠の時間選択肢
+const timeOptions2h = [
+  "10:00～12:00", "11:30～13:30", "13:00～15:00", "14:30～16:30",
+  "16:00～18:00", "17:30～19:30", "18:30～20:30", "19:00～21:00",
+  "20:30～22:30", "21:00～23:00", "21:30～23:30", "22:00～24:00"
+];
+
+// 3時間枠の時間選択肢
+const timeOptions3h = [
+  "10:00～13:00", "11:30～14:30", "13:00～16:00",
+  "16:00～19:00", "19:00～22:00", "19:30～22:30", "20:00～23:00", "21:00～24:00"
+];
+
+const inputsDiv2h = document.getElementById("inputs2h");
+const inputsDiv3h = document.getElementById("inputs3h");
+
+// 入力欄を生成する共通関数
+const createInputs = (container, prefix, options) => {
+    slots.forEach((slotName, i) => {
+        const label = document.createElement("label");
+        label.textContent = slotName + " ";
+
+        const dateInput = document.createElement("input");
+        dateInput.type = "date";
+        dateInput.id = `${prefix}date${i}`;
+
+        const timeSelect = document.createElement("select");
+        timeSelect.id = `${prefix}time${i}`;
+
+        options.forEach(t => {
+            const opt = new Option(t, t);
+            timeSelect.appendChild(opt);
+        });
+
+        label.appendChild(dateInput);
+        label.appendChild(timeSelect);
+        container.appendChild(label);
+    });
+};
+
+// 2hと3hそれぞれの入力欄を配置
+createInputs(inputsDiv2h, "2h_", timeOptions2h);
+createInputs(inputsDiv3h, "3h_", timeOptions3h);
+
+// 時間を分に変換するヘルパー
+const toMinutes = t => {
+    const [h, m] = t.split("～")[0].split(":").map(Number);
+    return h * 60 + m;
+};
+
+// 日程生成の共通処理
+const generateSchedule = (prefix, outputId) => {
+    const week = ["日","月","火","水","木","金","土"];
+    let items = [];
+
+    for (let i = 0; i < slots.length; i++) {
+        const dateInput = document.getElementById(`${prefix}date${i}`);
+        const dateVal = dateInput.value;
+        const timeVal = document.getElementById(`${prefix}time${i}`).value;
+
+        if (dateVal) {
+            items.push({
+                dateObj: new Date(dateVal),
+                timeVal
+            });
+        }
+    }
+
+    if (items.length === 0) {
+        alert("少なくとも1つ以上の日付を選択してください");
+        return;
+    }
+
+    items.sort((a, b) => (a.dateObj - b.dateObj) || (toMinutes(a.timeVal) - toMinutes(b.timeVal)));
+
+    const scheduleText = items.map((item, idx) => {
+        const d = item.dateObj;
+        const slotNum = slots[idx] || `(${idx + 1})`;
+        return `${slotNum}${d.getMonth() + 1}/${d.getDate()} (${week[d.getDay()]}) ${item.timeVal}`;
+    }).join("\n");
+
+    document.getElementById(outputId).value = scheduleText;
+};
+
+// 生成ボタンのイベント登録
+document.getElementById("generateBtn2h").addEventListener("click", () => generateSchedule("2h_", "output2h"));
+document.getElementById("generateBtn3h").addEventListener("click", () => generateSchedule("3h_", "output3h"));
+
+// コピー処理の共通関数
+const copyText = async (outputId) => {
+    const text = document.getElementById(outputId).value;
+    if (!text) {
+        alert("まず日付と時間帯を入力し、生成ボタンを押してください");
+        return;
+    }
+    await navigator.clipboard.writeText(text);
+};
+
+// コピーボタンのイベント登録
+document.getElementById("copyBtn2h").addEventListener("click", () => copyText("output2h"));
+document.getElementById("copyBtn3h").addEventListener("click", () => copyText("output3h"));
+
+// すべてを初期化する
+document.getElementById("resetBtn").addEventListener("click", () => {
+    document.getElementById("output2h").value = "";
+    document.getElementById("output3h").value = "";
+    slots.forEach((_, i) => {
+        document.getElementById(`2h_date${i}`).value = "";
+        document.getElementById(`2h_time${i}`).selectedIndex = 0;
+        document.getElementById(`3h_date${i}`).value = "";
+        document.getElementById(`3h_time${i}`).selectedIndex = 0;
+    });
+});
+</script>
+</body>
+</html>
