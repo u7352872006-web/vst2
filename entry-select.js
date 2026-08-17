@@ -1,6 +1,7 @@
 export function initEntrySelect(targetId, onChangeCallback) {
     const container = document.getElementById(targetId);
     const mediaList = [
+        { label: "（Meta1親アカ）@467", value: "動画編集@467krnym_" }, 
         { label: "（Meta1）@080", value: "動画編集＠080uolh_" },
         { label: "（Meta2）@851", value: "動画編集＠851nqhyd_" },
         { label: "（Meta3）@899", value: "動画編集＠899zwdaz_" },
