@@ -1,10 +1,12 @@
 export function initEntrySelect(targetId, onChangeCallback) {
     const container = document.getElementById(targetId);
     const mediaList = [
-        { label: "（Meta1 メイン）@467", value: "動画編集＠467krnym_" }, 
-        { label: "（Meta1）@080", value: "動画編集＠080uolh_" },
-        { label: "（Meta2）@851", value: "動画編集＠851nqhyd_" },
-        { label: "（Meta3）@899", value: "動画編集＠899zwdaz_" },
+        { label: "カズマル｜動画編集講師（Meta1）＠467", value: "動画編集＠467krnym_" }, 
+        { label: "カズマル｜動画編集講師（Meta2）＠577", value: "動画編集＠577mqkja_" }, 
+        { label: "カズマル｜動画編集講師（Meta3）＠154", value: "動画編集＠154pvvad_" }, 
+        { label: "個別サポート用（Meta1）＠080", value: "動画編集＠080uolh_" },
+        { label: "個別サポート用（Meta2）＠851", value: "動画編集＠851nqhyd_" },
+        { label: "個別サポート用（Meta3）＠899", value: "動画編集＠899zwdaz_" },
         { label: "カズマル｜日程調整用", value: "カズマル｜日程調整用_" },
         { label: "貯金3億27歳♂日程調整用@664dijnl", value: "貯金3億27歳♂日程調整用@664dijnl_" },
         { label: "（プレゼント企画経由）@527djnmg", value: "動画編集＠527djnmg_" },
