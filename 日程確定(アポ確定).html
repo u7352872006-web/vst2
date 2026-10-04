@@ -120,8 +120,7 @@
     </li>
     <li>
       <span style="color:#B22222; font-weight:bold; font-size:18px;"> Zoomリンク送信</span><br>
-      <span style="color:gray;">※再調整の場合、無料プレゼントの部分を消す</span><br>
-      <textarea id="zoomOutput" rows="18" cols="30"></textarea>
+      <textarea id="zoomOutput" rows="10" cols="30"></textarea>
       <button id="zoomCopyBtn">コピー</button>
       <br><br>
     </li>
@@ -190,7 +189,7 @@ const updateZoomMessage = () => {
     return;
   }
   
-  ui.zoomOutput.value = `実施日：${date}\n\n${ui.hiddenZoom.value}\n\n【無料プレゼントはこちら👇】\nhttps://forms.gle/i2XPWLVQE44iYc7b8`;
+  ui.zoomOutput.value = `実施日：${date}\n\n${ui.hiddenZoom.value}`;
 };
 
 // --- イベントリスナー ---
